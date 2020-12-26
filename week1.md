@@ -36,12 +36,34 @@ $ javac Hello.java
 ***
 
 ### 실행하는 방법
-'java'명령어로 클래스명을 주어 실행.<br/>
+- 'java'명령어로 클래스명을 주어 실행.<br/>
 ```bash
 $ java [클래스명]
 ```
 ```bash
 $ java Hello
+```
+#### 실행 옵션
+- 명령어로 'java'만 실행하면  java의 명령 옵션을 확인할 수 있다.
+```bash
+$ java
+```
+#### 실행 옵션 종류
+```bash
+$ java -cp <classpath>      // 참조할 클래스들이 있는 곳의 경로 지정.
+
+$ java -D<property=value>   // 자바 시스템 프로퍼티 설정.
+
+$ java -jar                 // 실행가능한 jar 실행.
+
+$ java -agentlib:<agent>    // 주로 성능 검토 및 모니터링을 위한 에이전트를 사용하기 위해 지정.
+$ java -agentpath:<path to agent> 
+
+$ java -Xms<size>           // JVM의 최소 힙 사이즈
+
+$ java -Xmx<size>           // JVM의 최대 힙 사이즈
+
+$ java -verbose             // 디버깅에 유용할 수도 있는 추가적인 정보를 출력.
 ```
 ***
 ### 바이트코드란 무엇인가
