@@ -19,7 +19,7 @@
 ***
 
 ### 컴파일 하는 방법
-[![pic](https://user-images.githubusercontent.com/26809312/103145751-bc92f400-4782-11eb-9a7f-758aa6af2ed6.png)]
+![pic](https://user-images.githubusercontent.com/26809312/103145751-bc92f400-4782-11eb-9a7f-758aa6af2ed6.png)
 <br/>
  출처 : [https://cocomo.tistory.com/499](https://cocomo.tistory.com/499)
  <br/>
