@@ -15,5 +15,5 @@
 ### week1. JVM은 무엇이며 자바 코드는 어떻게 실행하는 것인가
 
 
-* github : https://github.com/whiteship/live-study
-* youtube : https://www.youtube.com/user/whiteship2000
+* github : [https://github.com/whiteship/live-study](https://github.com/whiteship/live-study)
+* youtube : [https://www.youtube.com/user/whiteship2000](https://www.youtube.com/user/whiteship2000)
