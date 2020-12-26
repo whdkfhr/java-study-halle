@@ -23,12 +23,10 @@
 출처 : [https://cocomo.tistory.com/499](https://cocomo.tistory.com/499)
 JDK에 들어있는 javac를 사용하여 자바 소스를 바이트코드(클래스파일)로 컴파일 한다.
 커맨드창을 실행해서 직접 명령을 주거나 IDE를 사용해서 컴파일 할 수 있다.
-'''java
-$ javac [자바 소스코드 파일]
-'''
-'''
-$ javac Hello.java
-'''
+
+'$ javac [자바 소스코드 파일]'
+'$ javac Hello.java'
+
 
 ### 실행하는 방법
 ### 바이트코드란 무엇인가
