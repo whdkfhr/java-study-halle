@@ -19,8 +19,10 @@
 ***
 
 ### 컴파일 하는 방법
-!<img width="639" alt="스크린샷 2020-12-26 오후 2 00 25" src="https://user-images.githubusercontent.com/26809312/103145751-bc92f400-4782-11eb-9a7f-758aa6af2ed6.png">
+<img width="639" alt="스크린샷 2020-12-26 오후 2 00 25" src="https://user-images.githubusercontent.com/26809312/103145751-bc92f400-4782-11eb-9a7f-758aa6af2ed6.png">
+<br/>
  출처 : [https://cocomo.tistory.com/499](https://cocomo.tistory.com/499)
+ <br/>
  - JDK에 들어있는 javac를 사용하여 자바 소스를 바이트코드(클래스파일)로 컴파일 한다.
  - 커맨드창을 실행해서 직접 명령을 주거나 IDE를 사용해서 컴파일 할 수 있다.
 
