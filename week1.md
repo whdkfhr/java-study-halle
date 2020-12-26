@@ -79,6 +79,12 @@ $ java -verbose             // 디버깅에 유용할 수도 있는 추가적인
 ***
 
 ### JVM 구성 요소
+![pic]https://user-images.githubusercontent.com/26809312/103146103-e8fd3f00-4787-11eb-9da3-9c1abc1156d6.png
+<br/>
+ 출처 : [https://sjh836.tistory.com/64](https://sjh836.tistory.com/64)
 ***
 
 ### JDK와 JRE의 차이
+- JRE : 자바 애플리케이션을 실행할 수 있는 핵심 라이브러리를 가지고 있다.
+- JDK : JRE에 개발 툴이 더 포함되어 있다.
+- 자바11부터 JRE를 따로 제공하지 않는다.(JDK로만 제공)
