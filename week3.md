@@ -278,4 +278,83 @@ System.out.println(weekCount >= 14) ? "스프링 공부" : "자바 공부");
 
 ### 연산자 우선 순위
 - 괄호의 우선순위가 제일 높고, 산술 > 비교 > 논리 > 대입의 순서이며, 단항 > 이항 > 삼항의 순서이다.
+![pic](https://user-images.githubusercontent.com/26809312/103265352-bc982b80-49f0-11eb-84a2-4b37655b84d5.png)
 
+***
+
+### (optional) Java 13. switch operator
+- switch 내에서 라벨이 일치하는 경우, ｀case -> A｀와 같은 형식으로 표현이 가능.
+- 단일 수행 또는 블록 수행이 가능.
+- switch 블록 내에서 계산된 값을 반환하느 ｀yield｀라는 키워드가 생김.
+- 여러 조건을 쉼표로 구분하여 한 라인으로 처리할 수 있음.
+```java
+enum Day { SUN, MON, TUE, WED, THU, FRI, SAT; }
+```
+```java
+// traditional switch expression
+static void test(Day day) {
+  switch(day) {
+    case MON:
+    case FRI:
+    case SUN:
+      System.out.println(6);
+      break;
+    case TUE:
+      System out.println(7);
+      break;
+    case THU:
+    case SAT:
+      System.out.println(8);
+      break;
+    case WED:
+      System.out.println(9);
+      break;
+  }
+}
+```
+```java
+// new switch expression
+static void test(Day day) {
+  System.out.println(
+    swtich(day) {
+      case MON, FRI, SUN -> 6;
+      case TUE -> 7;
+      case THU, SAT -> 8;
+      case WED -> 9;
+    }
+  );
+}
+```
+- switch의 반환 yield
+    - `yield`는 쉽게 말해 함수의 return과 비슷하다고 할 수 있다.
+    - switch블록에 특정 값을 switch의 결과값으로 반환하는 것이다.
+```java
+static void test(Day day) {
+  int cnt = switch(day) {
+    case MON -> 0;
+    case TUE -> 1;
+    case WED -> {
+      int k = day.toString().length();
+      int result = k + 5;
+      yield result;
+      // break result; <--- Java 12 switch expression
+    }
+    default -> 0;
+  };
+}
+```
+```java
+// yield 키워드는 항상 switch 블록 내부에서만 사용
+static void test(Day day) {
+  int cnt = switch(day) {
+    case MON -> 0;
+    case TUE -> yield 1;    // error, yield는 block 안에서만 유효
+    case WED -> {
+      yield 2;              // ok
+    }
+    default -> 0;
+  };
+}
+```
+- default
+    - switch의 반환값이 따로 필요하지 않은 경우나, case가 switch로 들어오는 모든 인자를 커버하는 경우에는 `default` 항목을 따로 넣어주지 않아도 된다. 하지만 그렇지 않은 경우에는 `default -> { ...; }`를 꼭 작성해야 한다.
