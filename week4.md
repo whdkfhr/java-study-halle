@@ -147,7 +147,7 @@ void init() {
 }
 ```
 
-    - @DisplayName, @Disabled : 표시 이름을 변경하거나, 메소드를 비활성화
+   - @DisplayName, @Disabled : 표시 이름을 변경하거나, 메소드를 비활성화
     
 ```java
 @DisplayName("Single test Successful")
