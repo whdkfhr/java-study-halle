@@ -133,8 +133,7 @@ do {
     - JUnit 목성 : JUnit5 에서 테스트를 작성하기위한 새로운 프로그래밍 및 확장 모델이 포함되어 있다.
     - JUnit 빈티지 : JUnit5 플랫폼에서 JUnit3 및 JUnit4 기반 테스트 실행을 지원한다.
 - 기본 애노테이션
-<br/>
-    - @BeforeAll, @BeforEach : 주요 테스트 케이스 전에 실행되는 코드
+`@BeforeAll, @BeforEach : 주요 테스트 케이스 전에 실행되는 코드`
 ```java
 // @BeforeAll 애노테이션이 있는 메소드는 static이어야 한다.
 @BeforeAll
@@ -147,9 +146,7 @@ void init() {
     log.info("@BeforeEach - executes before each test method in this class");
 }
 ```
-<br/>
-    - @DisplayName, @Disabled : 표시 이름을 변경하거나, 메소드를 비활성화
-    
+`@DisplayName, @Disabled : 표시 이름을 변경하거나, 메소드를 비활성화`
 ```java
 @DisplayName("Single test Successful")
 @Test
@@ -162,10 +159,103 @@ void testSingleSuccessTest() {
 vod testShowSomething() {
 }
 ```
-- 아키텍처애
-***
+`@AfterEach, AfterAll : 테스트 실행 후 작업에 연결된 메서드`
+```java
+@AfterEach
+void tearDown() {
+    log.info("@AfterEach - executed after each test method");
+}
 
-#### 관계 연산자(Relational operator, 비교연산자)
+// @AfterAll - static 메소드이이어야 한다
+@AfterAll
+static void done() {
+    log.info("AfterAll - executed after all test methods");
+}
+```
+- 주장과 가정
+    - JUnit5는 Java8의 새로운 기능, 특히 람다 표현식을 최대한 활요하려 한다.
+`assertion : org.junit.jupiter.api.Assertions 로 이동 되었으며 크게 개선됨. 앞서 언급했듯 이제 assertion에서 람다를 사용할 수 있다`
+```java
+@Test
+void lambdaExpressions() {
+    assertTrue(Stream.of(1,2,3)
+    .stream()
+    .mapToInt(i->i)
+    .sum()>5, ()->"Sum should be greater than 5);
+}
+```
+MultipleFailuresError로 그룹 내에서 실패한 주장을 보고하는 assertAll()을 사용하여 주장을 그룹화 할 수도 있다. 즉, 오류의 정확한 위치를 찾을 수 있으므로 더 복잡한 주장을 하는 것이 더 안전하다
+```java
+@Test
+void groupAssertions() {
+    int[] nums = {0, 1, 2, 3, 4};
+    assertAll("numbers",
+    ()->assertEquals(nums[0],1),
+    ()->assertEquals(nums[3],3),
+    ()->assertEquals(nums[4],1)
+    );
+}
+```
+`가정`
+특히 조건이 충족되는 경우에만 테스트를 실행하는 데 가정이 사용된다. 이는 일반적으로 테스트를 제대로 실행하는데 필요하지만 테스트 대상과 직접 관련이 없는 외부 조건에 사용된다. 가정은 assumeTrue(), assumeFalse() 및 assumingThat()으로 선언할 수 있다. 가정이 실패하면 TestAbortedException이 발생하고 테스트를 건너 뛴다.
+```java
+@Test
+void trueAssumption() {
+    assumeTrue(5>1);
+    assertEquals(5+2, 7);
+}
+
+@Test
+void falseAssumption() {
+    assumeFalse(5 < 1);
+    assertEquals(5+2, 7);
+}
+
+@Test
+void assumptionThat() {
+    String someStr = "just a string";
+    assumingThat(
+        someStr.equals("just a string"),
+        ()->assertEquals(2+2, 4)
+    );
+}
+```
+- 예외 테스트
+JUnit5에는 두 가지 예외 테스트 방법이 있다. 둘 다 assertThrows() 메소드를 사용하여 구현할 수 있다.
+```java
+@Test
+void shouldThrowException() {
+    Throwable exceptin = assertThrows(UnsupportedOperationException.class, ()->{
+        throw new UnsupportedOperationException("Not supported");
+    });
+}
+
+@Test
+void assertThrowsException() {
+    String str = null;
+    assertThrows(IllegalArgumentsException.class, () -> {
+        Integer.valueOf(str);
+    });
+}
+```
+- Test Suites
+JUnit5의 새로운 기능을 계속하기 위해 test suites에서 여러 테스트 클래스를 집계하는 개념을 파악하여 함께 실행할 수 있다. JUnit5는 @SelectPackages 및 @SelectClasses 라는 두 가지 주석을 제공하여 test suites를 만든다. 이 초기 단계에서 대부분의 IDE는 이러한 기능을 지원하지 않는다.
+```java
+// @SelectPackage는 test suites를 실행할 때 선택할 패키지 이름을 지정하는데 사용된다. 여기서는 모든 테스트를 실행.
+@RunWith(JUnitPlatform.class)
+@SelectPackages("me.arok")
+public class AllUnitTest{}
+```
+```java
+// @SelectClasses는 test suites를 실행할 때 선택할 클래스를 지정하는데 사용된다.
+@RunWith(JUnitPlatform.class)
+@SelectClasses({AssertionTest.class, AssumptionTest.class, ExceptionTest.class})
+public class AllUnitTest{}
+```
+
+*** 
+
+#### 과제1. live-study 댓디 보드를 만드는 
 - 두 피연산자의 상대적인 크기를 판단하는 연산자.
 - 왼쪽의 피연산자와 오른쪽의 피연산자를 비교하여, 어느쪽이 더 큰지, 작은지, 또는 같은지를 판단.
 - 결합방향은 왼쪽에서 오른쪽.
