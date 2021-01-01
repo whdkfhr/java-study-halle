@@ -256,24 +256,36 @@ public class AllUnitTest{}
 *** 
 
 #### 과제1. live-study 댓디 보드를 만드는 
-- 두 피연산자의 상대적인 크기를 판단하는 연산자.
-- 왼쪽의 피연산자와 오른쪽의 피연산자를 비교하여, 어느쪽이 더 큰지, 작은지, 또는 같은지를 판단.
-- 결합방향은 왼쪽에서 오른쪽.
 ```java
-/*
-* == 같으면 true.
-* != 다르면 true.
-* > 왼쪽이 크면 true
-* >= 왼쪽이 오른쪽보다 크거나 같으면 true.
-* < 오른쪽이 크면 true.
-* <= 오른쪽이 왼쪽보다 크거나 같으면 true.
-*/
-class RelationalOperator {
-  public static void main(String[] args) {
-    int a = 1, b = 2;
-    System.out.println(a == b);   // false
-    System.out.println(a < b);   // true
-  }
+// 사용자 아이디 및 암호를 통해 연결
+GitHub gitHub = new GitHubBuilder().withPassword("my_user", "my_password").build();
+
+// 깃헙 레포 연결
+GHRepository ghRepository = gitHub.getRepository("whdkfhr/java-study-halle");
+
+// 참여자 저장소 생성
+Map<String, int[]> participantMap = new HashMap<>();
+
+// 참여여부 체크
+for(int issueNum = 1; issueNum < 19; issueNum++) {
+    GHIssue ghIssue = ghRepository.getIssue(issueNum);
+    PagedIterable<GHIssueComment> ghIssueComments = ghIssue.listComments();
+    for(GHIssueComment comment : ghIssueComments) {
+        String participant = comment.getUser().getName();
+        if(participantMap.containsKey(participant)) {
+            int[] assignments = participantMap.get(participant);
+            assignments[issueNum] = 1;
+        } else {
+            int[] assignments = new int[19];
+            assignments[issueNum] = 1;
+            participantMap.put(participant, assignments);
+        }
+    }
+}
+for(String key : participantMap.keySet()) {
+    int[] weeks = participantMap.get(key);
+    System.out.print(Arrays.toString(weeks) + " ");
+    System.out.println(String.format("%.2f", ((float) Arrays.stream(weeks).sum()/18) * 100) + "%");
 }
 ```
 
