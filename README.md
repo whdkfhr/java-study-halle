@@ -6,7 +6,7 @@
 
 ### week5. 클래스
 
-### week4. 제어문
+### [week4. 제어문](https://github.com/whdkfhr/java-study-halle/edit/main/week4.md)
 
 ### [week3. 연산자](https://github.com/whdkfhr/java-study-halle/blob/main/week3.md)
 
