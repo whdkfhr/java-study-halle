@@ -133,6 +133,7 @@ do {
     - JUnit 목성 : JUnit5 에서 테스트를 작성하기위한 새로운 프로그래밍 및 확장 모델이 포함되어 있다.
     - JUnit 빈티지 : JUnit5 플랫폼에서 JUnit3 및 JUnit4 기반 테스트 실행을 지원한다.
 - 기본 애노테이션
+<br/>
     - @BeforeAll, @BeforEach : 주요 테스트 케이스 전에 실행되는 코드
 ```java
 // @BeforeAll 애노테이션이 있는 메소드는 static이어야 한다.
