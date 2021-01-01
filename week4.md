@@ -128,7 +128,40 @@ do {
   <scope>test</scope>
 </dependency>
 ```
+- 아키텍처
+    - JUnit 플랫폼 : JVM에서 테스트 프레임 워크를 시작하는 역할. JUnit과 빌드 도구와 같은 클라이언트 간의 안정적이고 강력한 인터페이스를 정의. 최족 목표는 클라이언트가 테스트를 발견하고 실행할 때 JUnit과 쉽게 통합되는 방법이다.
+    - JUnit 목성 : JUnit5 에서 테스트를 작성하기위한 새로운 프로그래밍 및 확장 모델이 포함되어 있다.
+    - JUnit 빈티지 : JUnit5 플랫폼에서 JUnit3 및 JUnit4 기반 테스트 실행을 지원한다.
+- 기본 애노테이션
+    - @BeforeAll, @BeforEach : 주요 테스트 케이스 전에 실행되는 코드
+```java
+// @BeforeAll 애노테이션이 있는 메소드는 static이어야 한다.
+@BeforeAll
+static void setup() {
+    log.info("@BeforeAll - executes once before all test methods in this class");
+}
 
+@BeforeEach
+void init() {
+    log.info("@BeforeEach - executes before each test method in this class");
+}
+```
+
+    - @DisplayName, @Disabled : 표시 이름을 변경하거나, 메소드를 비활성화
+    
+```java
+@DisplayName("Single test Successful")
+@Test
+void testSingleSuccessTest() {
+    log.info("success");
+}
+
+@Test
+@Disabled("Not implemented yet")
+vod testShowSomething() {
+}
+```
+- 아키텍처애
 ***
 
 #### 관계 연산자(Relational operator, 비교연산자)
