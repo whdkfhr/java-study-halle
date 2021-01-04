@@ -133,6 +133,7 @@ do {
     - JUnit 목성 : JUnit5 에서 테스트를 작성하기위한 새로운 프로그래밍 및 확장 모델이 포함되어 있다.
     - JUnit 빈티지 : JUnit5 플랫폼에서 JUnit3 및 JUnit4 기반 테스트 실행을 지원한다.
 - 기본 애노테이션
+<br/>
 `@BeforeAll, @BeforEach : 주요 테스트 케이스 전에 실행되는 코드`
 ```java
 // @BeforeAll 애노테이션이 있는 메소드는 static이어야 한다.
@@ -255,7 +256,7 @@ public class AllUnitTest{}
 
 *** 
 
-#### 과제1. live-study 댓디 보드를 만드는 
+#### 과제1. live-study 대시 보드를 만드는 
 ```java
 // 사용자 아이디 및 암호를 통해 연결
 GitHub gitHub = new GitHubBuilder().withPassword("my_user", "my_password").build();
@@ -424,181 +425,171 @@ class LinkedList {
 
 ***
 
-### instanceof
-- 참조 변수가 참조하고 있는 인스턴스의 실제 타입을 반환.
-- 해당 객체가 어떤 클래스(부모 클래스 포함)나 인터페이스로부터 생성되었는지 판별.
+### 과제3. Stack 구현
 ```java
-class Instanceof {
-  class Parent {}
-  class Child extends Parent implements MyInterface {}
-  interface MyInterface {}
+public class Stack {
 
-  public static void main(String[] args) {
-    Parent parent = new Parent();
-    Parent child = new Child();
+    Object[] stack;
+    int size;
+    int top;
     
-    System.out.println("parent instanceof Parent = " + (parent instanceof Parent));   // true
-    System.out.println("parent instanceof Child = " + (parent instanceof Child));     // false
-    System.out.println("parent instanceof MyInterface = " + (parent instanceof MyInterface));   // false
-    System.out.println("child instanceof Parent = " + (child instanceof Parent));   // true
-    System.out.println("child instanceof Child = " + (child instanceof Child));     // true
-    System.out.println("child instanceof MyInterface = " + (child instanceof MyInterface));   // true
-  }
+    public Stack(int size) {
+        top = -1;
+        stack = new int[size];
+        this.size = size;
+    }
+    
+    public Object peek() {
+        return stack[top];
+    }
+    
+    public Object pop() {
+        Object returnData = stack[top];
+        stack[top] = 0;
+        top--;
+        return returnData;
+    }
+    
+    public void push(Object data) {
+        stack[++top] = data;
+    }
 }
 ```
     
 ***
 
-### assignment(=) operator
-- 오른쪽의 값을 왼쪽 피연산자에 할당
+### 과제4. 앞서 만든 ListNode를 사용해서 Stack 구현
 ```java
-int i = 1;
-char c = 'a';
-```
-- 또는, 객체 참조를 할당하기 위해 사용.
-```java
-Member member = new Member(1L, "java");
-Point point = new Point(0, 10);
-```
-- 'a = b = c'의 경우, 오른쪽에서 왼족으로 수행. 'a = (b = c)'
-- 5개의 산술 연산자, 6개의 비트 및 shift 연산자와 결합해서 사용할 수 있다.
-```java
-/*
-* +=, -=, *=, /=, %= (산술 연산자와 결합해서 사용)
-* &=, |=, ^= (비트 연산자와 결합해서 사용)
-* <<=, >>=, >>>= (shift 연산자와 결합해서 사용)
-*/
-a += 2;       // a를 2 증가해서 저장
-b -= 5;       // c를 5 빼서 저장
-flags |= f;   // 플래그 값들(flags) 중에서 특정 프래그 값 f를 세팅해서(비트 OR 연산)
-flags &= ~f;  // 플래그 값들 중에서 특정 플래그 값 f를 세팅하지 않도록(f의 보수로 비트 AND 연산)
-```
-***
-
-### 화살표(->) 연산자
-- 자바 8 이상의 람다식에서 익명함수를 만들 때 사용.
-- 코드가 간결해 진다는 장점.
-- 화살표 왼쪽에 인자, 오른쪽에 실제 표현식을 쓴다,
-```java
-// 2 개의 숫자 중 큰 수 출력
-@FunctionalInterface
-public interface MyFI {
-  int getMax(int n1, int n2);
-}
-public static void main(String[] args) {
-  MyFI myFI = (n1, n2) -> (n1 >= n2) ? n1 : n2;
-  System.out.println(myFI.getMax(3, 5));        // 5
-}
-```
-- Java10에서 var를 도입하여 암시적 타이핑을 지원하게 됨. var는 keyword(ex.abstract)가 아니라 reserved type name이라서 변수, 함수 이름으로도 사용할 수 있다. 추가로 var의 도입으로 dynamic type을 지원하는 것은 아니다. 컴파일러가 알아서 타입을 추론해서 컴파일해주는 것이다.
-```java
-// Java 10 이전
-Map<User, List<String>> map = new HashMap<>();
-
-// Java 10
-var map = new HashMap<User, List<String>>();
-```
-
-***
-
-### 3항 연산자(Ternary operator)
-- if-else 구문을 간결하게 만든 표현식.
-- 3개의 피연산자가 물음표(?) 와 콜론(:)로 나눠져 있는 형태로 표현.
-```java
-<조건> ? <true이리 경우 반환되는 값> : <false일 경우 반환되는 값>
-```
-- 3개의 피연산자가 물음표(?) 와 콜론(:)로 나눠져 있는 형태로 표현.
-```java
-x > y ? x : y
-```
-- 두번째와 세번째 연산자는 같은 타입으로 변환할 수 있어야 한다.
-- 3개의 피연산자가 물음표(?) 와 콜론(:)로 나눠져 있는 형태로 표현.
-```java
-int weekCount = 3;
-System.out.println(weekCount >= 14) ? "스프링 공부" : "자바 공부");
-```
-
-***
-
-### 연산자 우선 순위
-- 괄호의 우선순위가 제일 높고, 산술 > 비교 > 논리 > 대입의 순서이며, 단항 > 이항 > 삼항의 순서이다.
-![pic](https://user-images.githubusercontent.com/26809312/103265352-bc982b80-49f0-11eb-84a2-4b37655b84d5.png)
-
-***
-
-### (optional) Java 13. switch operator
-- switch 내에서 라벨이 일치하는 경우, ｀case -> A｀와 같은 형식으로 표현이 가능.
-- 단일 수행 또는 블록 수행이 가능.
-- switch 블록 내에서 계산된 값을 반환하느 ｀yield｀라는 키워드가 생김.
-- 여러 조건을 쉼표로 구분하여 한 라인으로 처리할 수 있음.
-```java
-enum Day { SUN, MON, TUE, WED, THU, FRI, SAT; }
-```
-```java
-// traditional switch expression
-static void test(Day day) {
-  switch(day) {
-    case MON:
-    case FRI:
-    case SUN:
-      System.out.println(6);
-      break;
-    case TUE:
-      System out.println(7);
-      break;
-    case THU:
-    case SAT:
-      System.out.println(8);
-      break;
-    case WED:
-      System.out.println(9);
-      break;
-  }
-}
-```
-```java
-// new switch expression
-static void test(Day day) {
-  System.out.println(
-    swtich(day) {
-      case MON, FRI, SUN -> 6;
-      case TUE -> 7;
-      case THU, SAT -> 8;
-      case WED -> 9;
+public class StackByListNode {
+    
+    class Node<T> {
+        private T data;
+        private Node<T> next;
+        
+        public Node(T data) { 
+            this.data = data;
+        }
     }
-  );
-}
-```
-- switch의 반환 yield
-    - `yield`는 쉽게 말해 함수의 return과 비슷하다고 할 수 있다.
-    - switch블록에 특정 값을 switch의 결과값으로 반환하는 것이다.
-```java
-static void test(Day day) {
-  int cnt = switch(day) {
-    case MON -> 0;
-    case TUE -> 1;
-    case WED -> {
-      int k = day.toString().length();
-      int result = k + 5;
-      yield result;
-      // break result; <--- Java 12 switch expression
+    
+    private Node<T> top;
+    
+    public void push(T data) {
+        Node<T> node = new Node<>(data);
+        node.next = top;
+        top = node;
     }
-    default -> 0;
-  };
-}
-```
-```java
-// yield 키워드는 항상 switch 블록 내부에서만 사용
-static void test(Day day) {
-  int cnt = switch(day) {
-    case MON -> 0;
-    case TUE -> yield 1;    // error, yield는 block 안에서만 유효
-    case WED -> {
-      yield 2;              // ok
+    
+    public T pop() {
+        if(top == null)
+            throw new EmptyStackException();
+        T data = top.data;
+        top = top.next;
+        return data;
     }
-    default -> 0;
-  };
+    
+    public T peek() {
+        if(top == null)
+            throw new EmptyStackException();
+        return top.data;
+    }
+    
 }
 ```
-- default
-    - switch의 반환값이 따로 필요하지 않은 경우나, case가 switch로 들어오는 모든 인자를 커버하는 경우에는 `default` 항목을 따로 넣어주지 않아도 된다. 하지만 그렇지 않은 경우에는 `default -> { ...; }`를 꼭 작성해야 한다.
+***
+
+### 과제5. Queue 구현
+- 배열 사용
+```java
+public class QueueByArray<T> {
+    private T[] q;
+    private int rear, front, size;
+    
+    public QueueByArray() {
+        q = (T[]) new Object[2];
+        front = rear = size = 0;
+    }
+    
+    public int size() {
+        return size;
+    }
+    
+    public boolean isEmpty() {
+        return size == 0;
+    }
+    
+    public void resize(int length) {
+        Object[] q2 = new Object[length];
+        for(int i = 1, j = front + 1; i < size + 1; i++, j++) {
+            q2[i] = q[j % q.length];
+        }
+        front = 0;
+        rear = size;
+        q = (T[]) q2;
+    }
+    
+    public void add(T data) {
+        if((rear + 1) % q.length == front) {
+            resize(2 * q.length);
+        }
+        rear = (rear + 1) % q.length;
+        q[rear] = data;
+        size++;
+    }
+    
+    public T remove() {
+        if(isEmpty())
+            throw new NoSuchElementException();
+        front = (front + 1) % q.legnth;
+        T returnData = q[front];
+        q[front] = null;
+        size--;
+        
+        if(size > 0 && size == q.length / 4) {
+            resize(q.length / 2);
+        }
+        return returnData;
+    }
+}
+```
+- ListNode 사용
+```java
+public class QueueByListNode<T> {
+    private Node<T> top;
+    private int size;
+    
+    public QueueByListNode() {
+        top = null;
+        size = 0;
+    }
+    
+    public int size() {
+        return size;
+    }
+    
+    public boolean isEmpty() {
+        return size == 0;
+    }
+    
+    public void push(T data) {
+        top = new Node<T>(data);
+        size++;
+    }
+    
+    public T peek() {
+        if(isEmpty())
+            throw new NoSuchElementException();
+        return top.data;
+    }
+    
+    public T pop() {
+        if(isEmpty())
+            throw new NoSuchElementException();
+        T returnData = top.data;
+        top = top.next;
+        size--;
+        return returnData;
+    }
+}
+```
+
+***
