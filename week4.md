@@ -255,7 +255,7 @@ public class AllUnitTest{}
 
 *** 
 
-### 과제1. live-study 대시 보드를 만드는 
+### 과제1. live-study 대시 보드
 ```java
 // 사용자 아이디 및 암호를 통해 연결
 GitHub gitHub = new GitHubBuilder().withPassword("my_user", "my_password").build();
