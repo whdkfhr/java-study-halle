@@ -291,37 +291,134 @@ for(String key : participantMap.keySet()) {
 
 ***
 
-#### 논리 연산자(Logical operator)
-- 논리식으로 true / false 판단.
+#### 과제2. LinkedList 구현
 ```java
-/*
-* && 논리식이 모두 참이면 true(논리 AND 연산)
-* || 논리식 중에 하나라도 참이면 true(논리 OR 연산)
-* ! 논리식이 true 이면 false, false 이면 true(논리 NOT 연산)
-*/
-class LogicalOperator {
-  public static void main(String[] args) {
-    int a = 1, b = 2;
-    boolean c = true, d = false;
-    if(a == b){       // false
-      ...
+class LinkedList {
+
+    private Node head;
+    private Node tail;
+    private int size = 0;
+    
+    public class Node {
+    
+        private Object data;
+        private Node next;
+        
+        public Node(Object data) {
+            this.data = data;
+            this.next = null;
+        }
+        
+        public String toString() {
+            return String.valueOf(this.data);
+        }
     }
-    if(a != b) {      // true
-      ...
+    
+    // 추가, 삭제를 위한 node 탐색
+    Node node(int index) {
+        Node x = head;
+        for(int i = 0; i < index; i++)
+            x = x.next;
+        return x;
     }
-    if(a > b) {       // false
-      ...
+    
+    // 시작에 데이터 추가
+    public void addFirst(Object data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+        size++;
+        if(head.next == null)
+            tail = head;
     }
-    if(a < b) {       // true
-      ...
+    
+    // 끝에 추가
+    public void addLast(Object data) {
+        Node newNode = new Node(data);
+        if(size == 0) {
+            addFirst(data);
+        } else {
+            tail.next = newNode;
+            newNode = tail;
+            size++;
+        }
     }
-    if(c && d) {      // false
-      ...
+    
+    // 중간에 추가
+    public void add(int k, object data) {
+        if(k == 0) {
+            addFirst(data);
+        } else {
+            Node tmp1 = node(k - 1);
+            Node tmp2 = tmp1.next;
+            Node newNode = new Node(data);
+            tmp1.next = newNode;
+            newNode.next = tmp2;
+            size++;
+            if(newNode.next == null)
+                tail = newNode;
+        }
     }
-    if(c || d) {      // true
-      ...
+    
+    // 처음 노드 삭제
+    public Object removeFirst() {
+        Node tmp = head;
+        head = tmp.next;
+        
+        Object returnData = tmp.data;
+        tmp = null;
+        size--;
+        return returnData;
     }
-  }
+    
+    // 중간 노드 삭제
+    public Object remove(int k) {
+        if(k == 0)
+            return removeFirst();
+        
+        Node tmp = node(k - 1);
+        Node todoDeleted = tmp.next;
+        tmp.next = tmp.next.next;
+        Object returnData = todoDeleted.data;
+        if(todoDeleted.data == null) {
+            tail = tmp;
+        }
+        todoDeleted = null;
+        size--;
+        return returnData;
+    }
+    
+    // 엘리먼트의 크기
+    public int size() {
+        return size;
+    }
+    
+    // 엘리먼트 가져오기
+    public Object get(int k) {
+        Node tmp = node(k);
+        return tmp.data;
+    }
+    
+    // 탐색
+    public int indexOf(Object data) {
+        Node tmp = head;
+        int index = 0;
+        while(tmp.data != data) {
+            tmp = tmp.next;
+            index++;
+            if(tmp == null) return -1;
+        }
+        return index;
+    }
+    
+    public static void main(String[] args) {
+        LinkedList linkedList = new LinkedList();
+        linkedList.addLast(10);
+        linkedList.addLast(20);
+        linkedList.addLast(30);
+        System.out.println(linkedList.indexOf(10));
+        System.out.println(linkedList);
+    }
 }
 ```
 
