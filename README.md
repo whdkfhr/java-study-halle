@@ -4,7 +4,7 @@
 
 ### week6. 상속
 
-### week5. 클래스
+### [week5. 클래스](https://github.com/whdkfhr/java-study-halle/blob/main/week5.md)
 
 ### [week4. 제어문](https://github.com/whdkfhr/java-study-halle/edit/main/week4.md)
 
