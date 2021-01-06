@@ -205,16 +205,16 @@ public final class String ... {
 - 자바의 모든 클래스는 암시적으로 java.lang.Object 클래스를 상속받고 있다.
 - 때문에 우리는 Object에 있는 기능들을 사용할 수 있다.
 - `protected Object clone() throws CloneNotSupportedException`
-        - 객체를 복사해서 반환해 준다.
+    - 객체를 복사해서 반환해 준다.
 - `public boolean equals(Object obj)`
-        - 현재 객체와 같은(==) 객체인지 여부를 반환
+    - 현재 객체와 같은(==) 객체인지 여부를 반환
 - `protected void finalize() throws Throwable`
-        - GC 발생 시 GC가 호출하여 현재 이 객체를 참조하는 곳이 더이상 없음을 확인한다. 자바 9 버전부터 deprecated 되었다.
+    - GC 발생 시 GC가 호출하여 현재 이 객체를 참조하는 곳이 더이상 없음을 확인한다. 자바 9 버전부터 deprecated 되었다.
 - `public final Class getClass()`
-        - 현재 객체의 클래스를 반환한다.
+    - 현재 객체의 클래스를 반환한다.
 - `public int hashCode()`
-        - 현재 객체의 해시코드 값을 반환한다.
+    - 현재 객체의 해시코드 값을 반환한다.
 - `public String toString()`
-        - 현재 객체를 문자열로 반환한다.
+    - 현재 객체를 문자열로 반환한다.
 
 ***
