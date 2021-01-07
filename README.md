@@ -1,8 +1,9 @@
 # java-study-halle
 
 ------------
+### [week7. 패키지]()
 
-### week6. 상속
+### [week6. 상속](https://github.com/whdkfhr/java-study-halle/blob/main/week6.md)
 
 ### [week5. 클래스](https://github.com/whdkfhr/java-study-halle/blob/main/week5.md)
 
