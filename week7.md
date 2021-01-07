@@ -15,13 +15,18 @@
 - 하나의 package는 클래스, 인터페이스 또는 다른 레퍼런스 타입들의 모은 것의 이름이다.
 - 패키지는 관련된 클래스 그룹과 그 클래스들이 담고 있는 내용을 의미하는 네임스페이스로 지정한다.
 - 자바에서는 자바 플랫폼의 핵심 클래스는 이름이 __java__ 로 시작하는 패키지에 있다.
-`java.lang'
-`java.util`
-`java.io`
-`java.net`
-`java.lang.reflect`
-`java.util.regex`
-`javax`
+- `java.lang`
+        - 기본적인 언어 클래스 패키지
+- `java.util`
+        - 다양항 유틸 클래스
+- `java.io`
+        - 입출력 클래스
+- `java.net`
+        - 네트워킹 클래스
+- `java.lang.reflect`
+- `java.util.regex`
+- `javax`
+        - 오라클에 의해 표준화된 자바 플랫폼 확장 버전
 `org.w3c`
 `org.omg`
 
