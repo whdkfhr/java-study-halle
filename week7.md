@@ -27,28 +27,16 @@
 - `java.util.regex`
 - `javax`
         - 오라클에 의해 표준화된 자바 플랫폼 확장 버전
-`org.w3c`
-`org.omg`
-
-public class Employee {
-    public static int base = 10000;
-
-    int salary() {
-        return base;
-    }
-}
-
-public class Manager extends Employee {
-    String position() {
-        return "Manager";
-    }
-}
-```
+- `org.w3c`
+- `org.omg`
 
 ***
 
-### super 키워드
-- 상속관계에서 자식이 부모의 필드나 메소드를 호출할 때 사용한다.
+### import 키워드
+- 자바 코드에서 클래스 또는 인터페이스를 참조할 때 사용한다.
+- import를 사용할 때에는 기본적으로 패키지 이름을 포함한 완전한 유형의 이름을 사용해야 한다.
+- 만약 파일을 조작하는 코드를 작성 중이고 java.io 패키지의 File클래스를 사용해야 할 경우, __java.io.File__ 을 입력해야 한다.
+        - 
 ```java
 class A {
     int i = 1;
