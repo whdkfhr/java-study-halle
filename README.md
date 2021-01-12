@@ -2,9 +2,9 @@
 
 ------------
 
-### [week8. 인터페이스]()
+### [week8. 인터페이스](https://github.com/whdkfhr/java-study-halle/blob/main/week8.md)
 
-### [week7. 패키지]()
+### [week7. 패키지](https://github.com/whdkfhr/java-study-halle/blob/main/week7.md)
 
 ### [week6. 상속](https://github.com/whdkfhr/java-study-halle/blob/main/week6.md)
 
