@@ -55,7 +55,6 @@ public static void main(String[] args) {
     }
 }
 
-// Read() 메소드에서 throws로 내부에서 처리해야할 예외를 밖으로 던짐
 public static void Read(byte[] buffer) throws IOException {
     System.in.read(buffer);
 }
@@ -90,18 +89,18 @@ public Obejct pop() {
 
 #### Types of Java Exceptions
 - Unchecked Exception
-        - RuntimeException을 상속받은 Exception.
-        - 일반적으로 발생을 예측할 수 없고 복구할 수 업는 예외.
-        - 주로 programming errors나 외부 API 사용 때문에 일어난다.
+    - RuntimeException을 상속받은 Exception.
+    - 일반적으로 발생을 예측할 수 없고 복구할 수 업는 예외.
+    - 주로 programming errors나 외부 API 사용 때문에 일어난다.
 - Checked Exception
-        - RuntimeException을 제외한 Exception을 상속받은 Exception.
-        - 예상 가능한 예외이며, 복구할 수 있다.
+    - RuntimeException을 제외한 Exception을 상속받은 Exception.
+    - 예상 가능한 예외이며, 복구할 수 있다.
 - Error
-        - Error 클래스의 하위 클래스들이 Error에 속한다. Error는 예상할 수 없고, 복구할 수도 없다.
+    - Error 클래스의 하위 클래스들이 Error에 속한다. Error는 예상할 수 없고, 복구할 수도 없다.
 
 #### Built-in Exceptions
 - ArithmeticException
-        - 산술 연산에서 예외 조건이 발생했을 때 발생.
+    - 산술 연산에서 예외 조건이 발생했을 때 발생.
 ```java
 class ArithmetixExceptionTest {
     public static void main(String[] args) {
@@ -116,8 +115,8 @@ class ArithmetixExceptionTest {
 }
 ```
 - ArrayIndexOutOfBoundException
-        - 잘못된 인덱스로 Array에 액세스했을 때 발생.
-        - 인덱스가 음수이거나 배열 크기보다 크거나 같을 때 발생.
+    - 잘못된 인덱스로 Array에 액세스했을 때 발생.
+    - 인덱스가 음수이거나 배열 크기보다 크거나 같을 때 발생.
 ```java
 public static void main(String[] args) {
     try {
@@ -129,7 +128,7 @@ public static void main(String[] args) {
 }
 ```
 - ClassNotFoundException
-        - 정의한 클래스를 찾을 수 없을 때 발생.
+    - 정의한 클래스를 찾을 수 없을 때 발생.
 ```java
 public static void main(String[] args) {
     Object o = class.forName(args[0]).newInstance();
@@ -137,7 +136,7 @@ public static void main(String[] args) {
 }
 ```
 - FileNotFoundException
-        - 파일에 액세스할 수 없거나 열리지 않을 때 발생
+    - 파일에 액세스할 수 없거나 열리지 않을 때 발생
 ```java
 public static void main(String[] args) {
     try {
@@ -149,7 +148,7 @@ public static void main(String[] args) {
 }
 ```
 - IOException
-        - 입출려겨 작업이 실패하거나 중단될 때 발생.
+    - 입출려겨 작업이 실패하거나 중단될 때 발생.
 ```java
 public static void main(String[] args) {
     FileInputStream f = null;
@@ -162,7 +161,7 @@ public static void main(String[] args) {
 }
 ```
 - InterruptedException
-        - Thread가 waiting, sleeping 또는 어떤 처리를 하고 있을 때 interrupt가 되면 발생하는 예외.
+    - Thread가 waiting, sleeping 또는 어떤 처리를 하고 있을 때 interrupt가 되면 발생하는 예외.
 ```java
 static class TestInterruptingThread extends Thread {
     public void run() {
@@ -182,7 +181,7 @@ public static void main(String[] args) {
 }
 ```
 - NoSuchMethodException
-        - 찾을 수 없는 메소드에 액세스할 때 발생.
+    - 찾을 수 없는 메소드에 액세스할 때 발생.
 ```java
 public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException{
     Class c = Class.forName("NoSuchMethodExceptionTest");
@@ -190,7 +189,7 @@ public static void main(String[] args) throws ClassNotFoundException, NoSuchMeth
 }
 ```
 - NullPointerException
-        - null 객체의 멤버를 참조할 때 
+    - null 객체의 멤버를 참조할 때 
 ```java
 public static void main(String[] args) {
     try {
@@ -202,7 +201,7 @@ public static void main(String[] args) {
 }
 ```
 - NumberFormatException
-        - 메소드가 문자열을 숫자 형식으로 변환할 수 없는 경우 발생
+    - 메소드가 문자열을 숫자 형식으로 변환할 수 없는 경우 발생
 ```java
 public static void main(String[] args) {
     try {
@@ -214,7 +213,7 @@ public static void main(String[] args) {
 }
 ```
 - StringIndexOutOfBoundsException
-        - 문자열에 액세스하는 인덱스가 문자열보다 큰 경우거나 음수일 때 발생
+    - 문자열에 액세스하는 인덱스가 문자열보다 큰 경우거나 음수일 때 발생
 ```java
 public static void main(String[] args) {
     try {
@@ -230,18 +229,18 @@ public static void main(String[] args) {
 
 ### Exception과 Error의 차이
 - Exception이란
-        - 오라클에서는 Exception을 Event라고 한다. 프로그램의 정상적인 흐름을 방해시키는 이벤트이다.
+    - 오라클에서는 Exception을 Event라고 한다. 프로그램의 정상적인 흐름을 방해시키는 이벤트이다.
 - Exception 처리 흐름
-        - 이런 이벤트가 발생하면 메소드에서 에러 정보가 담긴 Exception Object를 만들고 런타임 시스템에 전달한다.
-        - 그러면 런타임 시스템은 이 Exception Handler를 찾으려고 한다. 이 Exception Handler를 찾으려는 집합은 메소드를 호출한 집합인 Method Call Stack이다.
-        - 먼저 에러가 발생한 메소드부터 찾고 거기서 찾지 못하면 이 메소드를 호출한 메소드에서 찾는식으로 진행.
-        - 이렇게 해서 찾으면 런타임 시스템은 Exception Object를 Exception Handler에 전달.
-        - Exception Handler는 Exception Object를 보고 자신이 처리할 수 있는 타입인지 판단하고 처리.
-        - 만약 Exception Handler를 찾지 못한다면 런타임 시스템은 종료된다.
+    - 이런 이벤트가 발생하면 메소드에서 에러 정보가 담긴 Exception Object를 만들고 런타임 시스템에 전달한다.
+    - 그러면 런타임 시스템은 이 Exception Handler를 찾으려고 한다. 이 Exception Handler를 찾으려는 집합은 메소드를 호출한 집합인 Method Call Stack이다.
+    - 먼저 에러가 발생한 메소드부터 찾고 거기서 찾지 못하면 이 메소드를 호출한 메소드에서 찾는식으로 진행.
+    - 이렇게 해서 찾으면 런타임 시스템은 Exception Object를 Exception Handler에 전달.
+    - Exception Handler는 Exception Object를 보고 자신이 처리할 수 있는 타입인지 판단하고 처리.
+    - 만약 Exception Handler를 찾지 못한다면 런타임 시스템은 종료된다.
 - Exception vs Error
-        - 둘 다 최상위 예외 클래스인 Throwable 클래스의 하위 클래스이다.
-        - Error는 주로 시스템 리소스 부족으로 인해 발생하는 문제를 나타내며, 이러한 유형의 문제는 어플리케이션 외부의 문제로 잡을 수 없다. 주로 확인되지 않은 유형에 속하며 런타임 시점 때 확인되고 컴파일 시점에는 알 수 없다.(ex 시스템 충돌 오류, 메모리 부족 오류 등)
-        - Exception은 어플리케이션 내부 문제로 확인할 수 있다. 컴파일 시점과 런타임 시점 모두 발생할 수 있고 Checked, UnChecked으로 나뉜다.
+    - 둘 다 최상위 예외 클래스인 Throwable 클래스의 하위 클래스이다.
+    - Error는 주로 시스템 리소스 부족으로 인해 발생하는 문제를 나타내며, 이러한 유형의 문제는 어플리케이션 외부의 문제로 잡을 수 없다. 주로 확인되지 않은 유형에 속하며 런타임 시점 때 확인되고 컴파일 시점에는 알 수 없다.(ex 시스템 충돌 오류, 메모리 부족 오류 등)
+    - Exception은 어플리케이션 내부 문제로 확인할 수 있다. 컴파일 시점과 런타임 시점 모두 발생할 수 있고 Checked, UnChecked으로 나뉜다.
 
 ***
 
