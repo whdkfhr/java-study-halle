@@ -245,56 +245,78 @@ public static void main(String[] args) {
 ***
 
 ### RuntimeException과 RE가 아닌 것의 차이
-- Exception에는 
+- Exception에는 크게 2가지 종류가 있다. __컴파일 시점에 발생하는 Exception__, __프로그램 실행시에 발생하는 RuntimeException__. 즉, 예외가 발생하는 시점에 프로그램이 실행 전 후 상태에 따라 이를 구분하면 된다.
+- RuntimeException은 UnCheckedException, 아닌 것은 CheckedException으로 분류.
+- 가장 큰 차이는 CheckedException의 경우 예외를 예측하고 복구할 수 있기 때문에 예외를 처리하는 Exception Handler가 강제된다. 즉, try-catch-finally block을 만들어야 한다. 하지만 RE는 그렇지 않다.
+- 또한, Checked Exception 종류의 사용자 정의 예외 클래스를 만들려면 java.lang.Exception 클래스를 상속받으면 되고 UnCheckedException 종류의 사용자 정의 예외 클래스를 만들려면 java.lang.RuntimeException 클래스를 상속받으면 된다.
+
 ***
 
-### 인터페이스의 기본 메소드(Default Method), Java8
-- 자바 8부터는 인터페이스에 default 메소드를 정의할 수 있다.
+### 커스텀한 예외 만드는 방법
+- Java platform에서는 자신만의 예외 클래스를 만들 수 있다.
+- 다음 조건에 부합된다면 만들어서 사용하고, 그렇지 않다면 기존의 자바에서 제공하는 예외를 사용하면 된다.
+    - Do you need an exception type that isn't represented by those in the Java platform?
+    - If they could differentiate your exception from those thrown by classes written by other vendors?
+    - Does your code throw more than one related exception?
+    - If you use someone else's exceptions, will users have access to those exceptions?
+
+#### Custom Checked Exception
 ```java
-public interface TimeClient {
-    void setTime(int hour, int minute, int second);
-    void setDate(int day, int month, int year);
-    void setDateAndTime(int day, int month, int year, int hour, int minute, int second);
-    LocalDateTime getLocalDateTime();
-    
-    default ZonedDateTime getZonedDateTime(String zoneString) {
-        return ZonedDateTime.of(getLocalDateTime(), getZonedId(zoneString));
-    }
+try (Scanner file = new Scanner(new File(fileName))) {
+    if(file.hasNextLine()) return file.nextLine();
+} catch(FileNotFoundException e) {
+    ...
 }
 ```
-
-***
-
-### 인터페이스의 private 메소드, Java9
-- 자바 9부터는 인터페이스에 private 메소드를 정의할 수 있다.
+- FileNotFoundException 은 정확한 예외의 원인을 알 수 없다. 파일의 이름이 유효하지 않으르 수 있고, 파일이 존재하지 않을 수도 있다 -> java.lang.Exception 클래스를 상속받은 커스텀 클래스를 만들어 해결할 수 있다.
 ```java
-public interface CustomCalculator {
-    // 짝수의 합
-    default int addEvenNumbers(int... nums) {
-        return add(n -> n % 2 == 0, nums);
+// 에러 메시지를 담을 생성자와, 근본 원인을 담을 생성자를 추가해서 예외를 만들 수 있다.
+public class IncorrectFileNameException extends Exception {
+    public IncorrectFileNameException(String errorMessage) {
+        super(errorMesage);
     }
     
-    // 홀수의 합
-    default int addOddNumbers(int... nums) {
-        return add(n -> n% 2 != 0, nums);
-    }
-    
-    // 더하기
-    private int add(IntPredicate predicate, int... nums) {
-        return IntStream.of(nums)
-            .filter(predicate)
-            .sum();
+    public IncorrectFileNameException(String errorMessage, Throwable err) {
+        super(errorMessage, err);
     }
 }
 ```
 ```java
-public class Main implements CustomCalculator {
-    public static void main(String[] args) {
-        int sumOfEvenNumbers = calculator.addEvenNumbers(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        System.out.println("Sum of even numbers = " + sumOfEvenNumbers;
-        
-        int sumOfOddNumbers = calculator.addOddNumbers(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        System.out.println("Sum of odd numbers = " + sumOfOddNumbers;
+try (Scanner file = new Scanner(new File(fileName))) {
+    if(file.hasNextLine()) return file.nextLine();
+} catch(FileNotFoundException e) {
+    // 커스텀 예외를 사용해 정확한 원인을 알 수 있다.
+    if(!isCorrectFileName(fileName)) {
+        throw new IncorrectFileNameException("Incorrect filename : " + fileName, e);
+    }
+}
+```
+
+#### Custome UnChecked Exception
+- 이 경우 오류는 런타임에서 감지되므로 Unchecked Exception이며 사용자 정의 예외가 필요하다.
+- java.lang.RuntimeException 클래스를 상속받는다.
+```java
+public class IncorrectFileExtensionException extends RuntimeException {
+    public IncorrectFileExtensionException(String errorMessage, Throwable err) {
+        super(errorMessage, err);
+    }
+}
+```
+```java
+try(Scanner file = new Scanner(new File(fileName))) {
+    if(file.hasNextLine()) {
+        return file.nextLine();
+    } else {
+        throw new IllegalArgumentException("Non readable file");
+    }
+} catch(FileNotFoundException e) {
+    if(isCorrectFileName(fileName)) {
+        throw new IncorrectFileNameException("Incorrect filename : " + fileName, e);
+    }
+} catch(IllegalArgumentException e) {
+    if(!containsExtension(fileName)) {
+        throw new IncorrectFileExtensionException(
+          "Filename does not contain extension : " + fileName, e);
     }
 }
 ```
