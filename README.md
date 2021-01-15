@@ -2,6 +2,8 @@
 
 ------------
 
+### [week9. 예외처리](https://github.com/whdkfhr/java-study-halle/blob/main/week9.md)
+
 ### [week8. 인터페이스](https://github.com/whdkfhr/java-study-halle/blob/main/week8.md)
 
 ### [week7. 패키지](https://github.com/whdkfhr/java-study-halle/blob/main/week7.md)
