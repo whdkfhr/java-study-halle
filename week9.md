@@ -4,7 +4,7 @@
 ## week9. 예외 처리
 
 ### 학습할 것
-- 자바에서 예외 처리 방법(try, catch, throw, finall)
+- 자바에서 예외 처리 방법(try, catch, throw, finally)
 - 자바가 제공하는 예외 계층 구조
 - Exception과 Error의 차이
 - RuntimeExceptino과 RE가 아닌 것의 차이
@@ -12,25 +12,78 @@
 
 ***
 
-### 자바에서 예외 처리 방법(try, catch, throw, finall)
+## 예외(Exception) 및 예외 처리 개념
+- __예외는 error의 일종이며 프로그램이 수행시 또는 컴파일시에 불능상태를 만든다.__
+- 예외 처리란 __Exception 예외가 발생할 것을 대비하여 미리 예측해 이를 소스상에서 제어하고 처리하도록 만드는 것__ 이다.
+- 즉, 예외란 error의 일종이며, 발생 시 시스템 및 프로그램을 불능상태를 야기함. 이를 막기 위해 예외 처리를 통해, 시스템 및 프로그램을 정상실행 상태로 유지하도록 함.
+
+### 자바에서 예외 처리 방법(try, catch, throw, finally)
 - 예외 처리는 갑작스러운 예외 Exception 발생으로 인해 시스템 및 프로그램이 불능상태에 빠지지 않고 시스템 및 프로그램이 정상실행 되도록 유지시켜 준다.
 - try 블록 : __실제 코드가 들어가는 곳으로써__ 예외 Exception이 발생할 가능성이 있는 코드
-- catch 블록 
+- catch 블록 : try 블록에서 Exception이 발생하면 코드 실행 순서가 catch 쪽으로 오게 된다. __즉, 예외에 대한 후처리 코드__
+- finally 블록 : try 블록에서의 __Exception과 발생 유무와 상관 없이 무조건 수행되는 코드__(옵션이라 생략 가능)
 ```java
-[접근제어자] interface [인터페이스 이름] {   
+try {
+    ...
+} catch(ExceptionType name) {
+    ...
+} finally {     // 생략 가능
+    ...
 }
 ```
-- 인터페이스의 바디는 추상 메소드를 포함하고 있지만 인터페이스 내의 모든 메소드들이 추상적이기 때문에 abstract 키워드가 필요하지 않다. 인터페이스의 모든 메소드들은 암묵적으로 public 이다.
+- throws : 예약어를 사용한 예외 던지기. 메소드 단위에서 내부 소스코드에서 에러가 발생했을시 'try ~ catch' 로 자기자신이 예외처리를 하는 것이 아니라, 이 메소드를 사용하는 곳으로 책임을 전가하는 행위이다.
 ```java
-public interface Predator {
-    void chasePrey();
-    void eatPrey();
+throws + 밖으로 던질 예외 종류
+```
+```java
+public static void main(String[] args) {
+    byte[] recive = new byte[128];
+    Read(recive);       // Read() 메소드 내부에서 난 에러를 처리해야하므로 에러가 뜸
+}
+
+// Read() 메소드에서 throws로 내부에서 처리해야할 예외를 밖으로 던짐
+public static void Read(byte[] buffer) throws IOException {
+    System.in.read(buffer);
+}
+```
+```java
+public static void main(String[] args) {
+    byte[] recive = new byte[128];
+    try {
+        Read(recive);
+    } catch(IOException e) {
+    }
+}
+
+// Read() 메소드에서 throws로 내부에서 처리해야할 예외를 밖으로 던짐
+public static void Read(byte[] buffer) throws IOException {
+    System.in.read(buffer);
+}
+```
+- throw : 인위적으로 예외를 발생시킬 때 사용. 프로그래머가 예외를 발생시키고자 하는 위치에서 고의로 예외를 발생시킬 수 있다.
+```java
+public static void main(String[] args) {
+    throw new Exception();      // throw 예약어를 사용하여 예외 발생. 무조건 'Exception'이라는 에러 발생.
+                                // 이 예외를 처리하기 위해서 "throws"로 예외를 메소드 밖으로 던지거나
+                                // "try ~ catch" 문으로 예외러리를 해주어야 한다.
+}
+```
+```java
+public Obejct pop() {
+    Object obj;
+    if(size == 0) {
+        throw new EmptyStackException();
+    }
+    obj = objectAt(size - 1);
+    setObjectAt(size - 1, null);
+    size--;
+    return obj;
 }
 ```
 
 ***
 
-### 인터페이스 구현하는 방법
+### 자바가 제공하는 예외 계층 구조
 - 클래스는 인터페이스를 구현할 수 있다.
 ```java
 class class Lion implements Predator {
