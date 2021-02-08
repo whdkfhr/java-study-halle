@@ -2,6 +2,8 @@
 
 ------------
 
+### [week10. 멀티쓰레드 프로그래밍](https://github.com/whdkfhr/java-study-halle/blob/main/week10.md)
+
 ### [week9. 예외처리](https://github.com/whdkfhr/java-study-halle/blob/main/week9.md)
 
 ### [week8. 인터페이스](https://github.com/whdkfhr/java-study-halle/blob/main/week8.md)
