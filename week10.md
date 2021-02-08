@@ -152,200 +152,38 @@ public static void main(String[] args) {
 - 한 스레드가 진행 중인 작업을 다른 스레드가 간섭하지 못하도록 막는 것.
 1. synchronized를 이용한 동기화
 ```java
-1. 
-```
-- ClassNotFoundException
-    - 정의한 클래스를 찾을 수 없을 때 발생.
-```java
-public static void main(String[] args) {
-    Object o = class.forName(args[0]).newInstance();
-    System.out.println("Class created for " + o.getClass().getName());
-}
-```
-- FileNotFoundException
-    - 파일에 액세스할 수 없거나 열리지 않을 때 발생
-```java
-public static void main(String[] args) {
-    try {
-        File file = new File("test.txt");
-        FileReader fr = new FileReader(file);
-    } catch(FileNotFoundException e) {
-        System.out.println("FileNotFoundException : " + e.getMessage());
-    }
-}
-```
-- IOException
-    - 입출려겨 작업이 실패하거나 중단될 때 발생.
-```java
-public static void main(String[] args) {
-    FileInputStream f = null;
-    f = new FileInputStream("test.txt");
-    int i;
-    while((i = f.read()) != -1) {
-        System.out.print((char)i);
-    }
-    f.close();
-}
-```
-- InterruptedException
-    - Thread가 waiting, sleeping 또는 어떤 처리를 하고 있을 때 interrupt가 되면 발생하는 예외.
-```java
-static class TestInterruptingThread extends Thread {
-    public void run() {
-        try {
-            Thread.sleep(1000);
-            System.out.println("task");
-        } catch(InterruptedException e) {
-            System.out.println("InterruptedException : " + e.getMessage());
-        }
-        System.out.println("Thread is running...");
-    }
-}
-public static void main(String[] args) {
-    TestInterruptingThread t = new TestInterruptingThread();
-    t.start();
-    t.interrupt();
-}
-```
-- NoSuchMethodException
-    - 찾을 수 없는 메소드에 액세스할 때 발생.
-```java
-public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException{
-    Class c = Class.forName("NoSuchMethodExceptionTest");
-    c.getDeclareMethod("test");
-}
-```
-- NullPointerException
-    - null 객체의 멤버를 참조할 때 
-```java
-public static void main(String[] args) {
-    try {
-        String s = null;
-        System.out.println(a.charAt(0));
-    } catch(NullPointerException e) {
-        System.out.println("NullPointerException : " + e.getMessage());
-    }
-}
-```
-- NumberFormatException
-    - 메소드가 문자열을 숫자 형식으로 변환할 수 없는 경우 발생
-```java
-public static void main(String[] args) {
-    try {
-        int num = Integer.parseInt("Test");
-        System.out.println(num);
-    } catch(NumberFormatException e) {
-        System.out.println("NumberFormatException : " + e.getMessage());
-    }
-}
-```
-- StringIndexOutOfBoundsException
-    - 문자열에 액세스하는 인덱스가 문자열보다 큰 경우거나 음수일 때 발생
-```java
-public static void main(String[] args) {
-    try {
-        String s = "string";
-        chat c = a.charAt(10);
-    } catch(StringIndexOutOfBoundsException e) {
-        System.out.println("StringIndexOutOfBoundsException : " + e.getMessage());
-    }
-}
-```
-
-***
-
-### Exception과 Error의 차이
-- Exception이란
-    - 오라클에서는 Exception을 Event라고 한다. 프로그램의 정상적인 흐름을 방해시키는 이벤트이다.
-- Exception 처리 흐름
-    - 이런 이벤트가 발생하면 메소드에서 에러 정보가 담긴 Exception Object를 만들고 런타임 시스템에 전달한다.
-    - 그러면 런타임 시스템은 이 Exception Handler를 찾으려고 한다. 이 Exception Handler를 찾으려는 집합은 메소드를 호출한 집합인 Method Call Stack이다.
-    - 먼저 에러가 발생한 메소드부터 찾고 거기서 찾지 못하면 이 메소드를 호출한 메소드에서 찾는식으로 진행.
-    - 이렇게 해서 찾으면 런타임 시스템은 Exception Object를 Exception Handler에 전달.
-    - Exception Handler는 Exception Object를 보고 자신이 처리할 수 있는 타입인지 판단하고 처리.
-    - 만약 Exception Handler를 찾지 못한다면 런타임 시스템은 종료된다.
-- Exception vs Error
-    - 둘 다 최상위 예외 클래스인 Throwable 클래스의 하위 클래스이다.
-    - Error는 주로 시스템 리소스 부족으로 인해 발생하는 문제를 나타내며, 이러한 유형의 문제는 어플리케이션 외부의 문제로 잡을 수 없다. 주로 확인되지 않은 유형에 속하며 런타임 시점 때 확인되고 컴파일 시점에는 알 수 없다.(ex 시스템 충돌 오류, 메모리 부족 오류 등)
-    - Exception은 어플리케이션 내부 문제로 확인할 수 있다. 컴파일 시점과 런타임 시점 모두 발생할 수 있고 Checked, UnChecked으로 나뉜다.
-
-***
-
-### RuntimeException과 RE가 아닌 것의 차이
-- Exception에는 크게 2가지 종류가 있다. __컴파일 시점에 발생하는 Exception__, __프로그램 실행시에 발생하는 RuntimeException__. 즉, 예외가 발생하는 시점에 프로그램이 실행 전 후 상태에 따라 이를 구분하면 된다.
-- RuntimeException은 UnCheckedException, 아닌 것은 CheckedException으로 분류.
-- 가장 큰 차이는 CheckedException의 경우 예외를 예측하고 복구할 수 있기 때문에 예외를 처리하는 Exception Handler가 강제된다. 즉, try-catch-finally block을 만들어야 한다. 하지만 RE는 그렇지 않다.
-- 또한, Checked Exception 종류의 사용자 정의 예외 클래스를 만들려면 java.lang.Exception 클래스를 상속받으면 되고 UnCheckedException 종류의 사용자 정의 예외 클래스를 만들려면 java.lang.RuntimeException 클래스를 상속받으면 된다.
-
-***
-
-### 커스텀한 예외 만드는 방법
-- Java platform에서는 자신만의 예외 클래스를 만들 수 있다.
-- 다음 조건에 부합된다면 만들어서 사용하고, 그렇지 않다면 기존의 자바에서 제공하는 예외를 사용하면 된다.
-    - Do you need an exception type that isn't represented by those in the Java platform?
-    - If they could differentiate your exception from those thrown by classes written by other vendors?
-    - Does your code throw more than one related exception?
-    - If you use someone else's exceptions, will users have access to those exceptions?
-
-#### Custom Checked Exception
-```java
-try (Scanner file = new Scanner(new File(fileName))) {
-    if(file.hasNextLine()) return file.nextLine();
-} catch(FileNotFoundException e) {
+1. 메서드 전체를 임계영역으로 지정.
+  public synchronized void something() {
     ...
-}
-```
-- FileNotFoundException 은 정확한 예외의 원인을 알 수 없다. 파일의 이름이 유효하지 않으르 수 있고, 파일이 존재하지 않을 수도 있다 -> java.lang.Exception 클래스를 상속받은 커스텀 클래스를 만들어 해결할 수 있다.
-```java
-// 에러 메시지를 담을 생성자와, 근본 원인을 담을 생성자를 추가해서 예외를 만들 수 있다.
-public class IncorrectFileNameException extends Exception {
-    public IncorrectFileNameException(String errorMessage) {
-        super(errorMesage);
-    }
-    
-    public IncorrectFileNameException(String errorMessage, Throwable err) {
-        super(errorMessage, err);
-    }
-}
-```
-```java
-try (Scanner file = new Scanner(new File(fileName))) {
-    if(file.hasNextLine()) return file.nextLine();
-} catch(FileNotFoundException e) {
-    // 커스텀 예외를 사용해 정확한 원인을 알 수 있다.
-    if(!isCorrectFileName(fileName)) {
-        throw new IncorrectFileNameException("Incorrect filename : " + fileName, e);
-    }
-}
-```
+  }
 
-#### Custome UnChecked Exception
-- 이 경우 오류는 런타임에서 감지되므로 Unchecked Exception이며 사용자 정의 예외가 필요하다.
-- java.lang.RuntimeException 클래스를 상속받는다.
-```java
-public class IncorrectFileExtensionException extends RuntimeException {
-    public IncorrectFileExtensionException(String errorMessage, Throwable err) {
-        super(errorMessage, err);
-    }
-}
+2. 특정한 영역을 임계영역으로 지정.
+  synchronized(객체의 참조변수) {
+    ...
+  }
 ```
-```java
-try(Scanner file = new Scanner(new File(fileName))) {
-    if(file.hasNextLine()) {
-        return file.nextLine();
-    } else {
-        throw new IllegalArgumentException("Non readable file");
-    }
-} catch(FileNotFoundException e) {
-    if(isCorrectFileName(fileName)) {
-        throw new IncorrectFileNameException("Incorrect filename : " + fileName, e);
-    }
-} catch(IllegalArgumentException e) {
-    if(!containsExtension(fileName)) {
-        throw new IncorrectFileExtensionException(
-          "Filename does not contain extension : " + fileName, e);
-    }
-}
-```
+- 스레드는 synchronized 메서드가 호출된 시점부터 해당 메서드가 포함된 객체의 lock을 얻어 작업을 수행하다가 메서드가 종료되면 lock을 반환한다.
+- lock의 획득과 반납이 모두 자동으로 이루어지므로, 개발자는 그저 임계영역만 설정해주면 된다.
+- 모든 객체는 lock을 하나씩 가지고 있고, 해당 객체의 lock을 가지고 있는 스레드만 임계영역의 코드를 수행할 수 있다.
+- 때문에 다른 스레드들은 lock을 얻을 때까지 기다리게 되므로, 가능하면 메서드 전체에 lock을 거는 것보다 synchronized 블럭으로 임계영역을 최소화하는 것이 좋다.
+
+2. lock과 Condition을 이용한 동기화
+- 동기화할 수 있는 방법은 synchronized 블럭 외에도 java.util.concurrent.locks 패키지가 제공하는 lock 클래스들을 이용하는 방법이 있다. 같은 메서드 내에서만 lock을 걸 수 있는 synchronized 블럭의 제약이 불편할 때 lock 클래스를 사용한다.
+  - synchronized의 경우 기본적으로 스레드간의 락을 획득하는 순서를 보장해주지 않는다. 이러한 것을 불공정 방법이라고 하는데 ReentrantLock은 불공정 방법 뿐만 아니라 메소드를 이용해 순서를 보장해 주도록(공정 방법)으로 설정할 수 있다.
+  - synchronized와 같은 단일 블록의 형태를 넘어 여러가지의 컬렉션이 얽혀 있을 때 명시적으로 락을 실행시킬 수 있다.
+  - 대기 상태의 락에 대한 인터럽트를 걸어야 할 경우 사용할 수 있다.
+  - 락을 획득하려고 대시중인 스레드들의 상태를 받아야 할 경우 사용할 수 있다.
+
+- 정리
+  - 락을 모니터링 해야할 때
+  - 락을 획득하려는 스레드의 개수가 많을 때 (4개 이상)
+  - 위에서 이야기한 복잡한 동기화 코드를 작성해야 할 때
+
+***
+
+### 데드락
+- 하나의 자원을 가지고 두 개 이상의 스레드가 서로 자원을 획득하기 위해 무한정 대기하고 있는 상태를 말한다.
+- 해결 방법?
+    - 교착상태를 방지하거나 회피하는 방법은 있지만 해결 방법은 중지하는 ㄴ것.
 
 ***
