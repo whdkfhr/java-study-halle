@@ -11,7 +11,7 @@
 
 ***
 
-## Thread 클래스와 Runnable 인터페이스
+### Thread 클래스와 Runnable 인터페이스
 - 스레드를 구현하는 방법은 Thread 클래스를 상속받는 방법과 Runnable 인터페이스를 구현하는 방법이 있다.
 - Thread 클래스를 상속받으면 다른 클래스를 상속받을 수 없기 때문에, Runnable 인터페이스를 구현하는 방법이 일반적이다.
 ```java
@@ -95,6 +95,7 @@ public class SingleThread implements Runnable {
   - wait() 메소드에 의해 Blocked 상태가 된 스레드는 notify() 메소드가 호출되면 Runnable 상태로 된다.
   - sleep() 메소드에 의해 Blocked 상태가 된 스레드는 지정된 시간이 지나면 Runnable 상태가 된다
 
+***
 
 ### 쓰레드의 우선순위
 - 스레드는 우선순위라는 멤버변수를 가지고 있는데, 이 우선순위의 값에 따라 스레드를 실행할 수 있다. 우선순위 범위는 1 ~ 10 이며, 높을수록 우선순위가 높다.
@@ -133,33 +134,25 @@ class ThreadDemo extends Thread {
 ***
 
 ### Main 스레드
-- ArithmeticException
+![pic](https://user-images.githubusercontent.com/26809312/107176890-d5462900-6a13-11eb-86f9-95315a36e8ab.png)
+- 자바 프로그램이 시작될 때 하나의 스레드가 즉시 실행된다. 이 스레드를 프로그램의 메인 스레드라고 한다.
+- 다중 스레드를 만들 때 메인 스레드가 자식 스레드를 만든다.
+- 모든 스레드의 실행이 완료하는 마지막 스레드도 메인 스레드이다.
     - 산술 연산에서 예외 조건이 발생했을 때 발생.
 ```java
-class ArithmetixExceptionTest {
-    public static void main(String[] args) {
-        try {
-            int a = 2, b = 0;
-            int c = a / b;      // 0으로 나눌 수 없음.
-            System.out.println("c = " + c);
-        } catch(ArithmeticException e) {
-            System.out.println("ArithmeticException : " + e.getMessage());
-        }
-    }
+public static void main(String[] args) {
+  Thread t = Thread.currentThread(); // 현재 실행중인 메인 스레드.
+  ...
 }
 ```
-- ArrayIndexOutOfBoundException
-    - 잘못된 인덱스로 Array에 액세스했을 때 발생.
-    - 인덱스가 음수이거나 배열 크기보다 크거나 같을 때 발생.
+
+***
+
+### 동기화
+- 한 스레드가 진행 중인 작업을 다른 스레드가 간섭하지 못하도록 막는 것.
+1. synchronized를 이용한 동기화
 ```java
-public static void main(String[] args) {
-    try {
-        int[] a = new int[3];
-        a[5] = 1;               // a[] 의 size는 3으로 잘못된 인덱스로 array에 엑세스
-    } catch(ArrayIndexOutOfBoundException e) {
-        System.out.println("ArrayIndexOutOfBoundException : " + e.getMessage());
-    }
-}
+1. 
 ```
 - ClassNotFoundException
     - 정의한 클래스를 찾을 수 없을 때 발생.
