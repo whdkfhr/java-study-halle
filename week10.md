@@ -85,22 +85,54 @@ public class SingleThread implements Runnable {
 ***
 
 ### 쓰레드의 상태
-![pic](https://user-images.githubusercontent.com/26809312/104680935-6d623280-5734-11eb-9bd2-86e93a1481a1.png)
-- java.lang.Throwable 클래스가 Java Exception의 root 클래스이다. hierarchy은 크게 두개로 나뉘는데 Exception과 Error로 나뉜다.
-- Exception도 Checked Exception과 Unchecked Exception으로 나뉜다.
+![pic](https://user-images.githubusercontent.com/26809312/107176415-af6c5480-6a12-11eb-9302-7e5b8f9d4098.png)
+- Runnalbe (준비 상태)
+- Running (실행 상태)
+- Dead (종료 상태)
+- Blocked (지연 상태)
+  - CPU 점유권을 상실한 상태
+  - 후에 특정 메소드를 실행시켜서 Runnable로 전환
+  - wait() 메소드에 의해 Blocked 상태가 된 스레드는 notify() 메소드가 호출되면 Runnable 상태로 된다.
+  - sleep() 메소드에 의해 Blocked 상태가 된 스레드는 지정된 시간이 지나면 Runnable 상태가 된다
 
-#### Types of Java Exceptions
-- Unchecked Exception
-    - RuntimeException을 상속받은 Exception.
-    - 일반적으로 발생을 예측할 수 없고 복구할 수 업는 예외.
-    - 주로 programming errors나 외부 API 사용 때문에 일어난다.
-- Checked Exception
-    - RuntimeException을 제외한 Exception을 상속받은 Exception.
-    - 예상 가능한 예외이며, 복구할 수 있다.
-- Error
-    - Error 클래스의 하위 클래스들이 Error에 속한다. Error는 예상할 수 없고, 복구할 수도 없다.
 
-#### Built-in Exceptions
+### 쓰레드의 우선순위
+- 스레드는 우선순위라는 멤버변수를 가지고 있는데, 이 우선순위의 값에 따라 스레드를 실행할 수 있다. 우선순위 범위는 1 ~ 10 이며, 높을수록 우선순위가 높다.
+```java
+public static final int MIN_PRIORITY = 1;
+public static final int NORM_PRIORITY = 1;
+public static final int MAX_PRIORITY = 1;
+```
+```java
+class ThreadDemo extends Thread {
+  public void run() {
+    System.out.println("Inside run method");
+  }
+  
+  public static void main(String[] args) {
+    ThreadDemo t1 = new ThreadDemo();
+    ThreadDemo t2 = new ThreadDemo();
+    ThreadDemo t3 = new ThreadDemo();
+    
+    // default 5
+    System.out.println("t1 thread priority : " + t1.getPriority());
+    System.out.println("t2 thread priority : " + t2.getPriority());
+    System.out.println("t3 thread priority : " + t3.getPriority());
+    
+    t1.setPriority(2);
+    t2.setPriority(5);
+    t3.setPriority(8);
+    
+    System.out.println("t1 thread priority : " + t1.getPriority());
+    System.out.println("t1 thread priority : " + t2.getPriority());
+    System.out.println("t1 thread priority : " + t3.getPriority());
+  }
+}
+```
+
+***
+
+### Main 스레드
 - ArithmeticException
     - 산술 연산에서 예외 조건이 발생했을 때 발생.
 ```java
