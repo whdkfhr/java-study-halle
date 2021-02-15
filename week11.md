@@ -55,44 +55,19 @@ Season fall = Season.valueOf("FALL");
 
 ### java.lang.Enum
 - 모든 enum은 암시적으로 java.lang.Enum 클래스를 상속받는다.
-- 자바는 
-- 모든 enum은 암시적으로 java.lang.Enum 클래스를 상속받는다.다중
-- 모든 enum은 암시적으로 java.lang.Enum 클래스를 상속받는다.
+- 자바는 다중상속을 지원하지 않으므로 enum은 다른 클래스를 상속 받을 수 없다.
+- java.lang.Enum을 상속받기 때문에 java.lang.Enum에 정의되어 있는 메소드들을 사용할 수 있다.
 ```java
-public static final int MIN_PRIORITY = 1;
-public static final int NORM_PRIORITY = 1;
-public static final int MAX_PRIORITY = 1;
-```
-```java
-class ThreadDemo extends Thread {
-  public void run() {
-    System.out.println("Inside run method");
-  }
-  
-  public static void main(String[] args) {
-    ThreadDemo t1 = new ThreadDemo();
-    ThreadDemo t2 = new ThreadDemo();
-    ThreadDemo t3 = new ThreadDemo();
-    
-    // default 5
-    System.out.println("t1 thread priority : " + t1.getPriority());
-    System.out.println("t2 thread priority : " + t2.getPriority());
-    System.out.println("t3 thread priority : " + t3.getPriority());
-    
-    t1.setPriority(2);
-    t2.setPriority(5);
-    t3.setPriority(8);
-    
-    System.out.println("t1 thread priority : " + t1.getPriority());
-    System.out.println("t1 thread priority : " + t2.getPriority());
-    System.out.println("t1 thread priority : " + t3.getPriority());
-  }
-}
+System.out.println(Season.SPRING.name());                     // SPRING
+System.out.println(Season.SPRING.compareTo(Season.WINTER));   // -1
+System.out.println(Season.SPRING.equals(Season.SPRING));      // true
+System.out.println(Season.SPRING.ordinal());                  // 0
+System.out.println(Season.SPRING.toString());                 // SPRING
 ```
 
 ***
 
-### Main 스레드
+### EnumSet
 ![pic](https://user-images.githubusercontent.com/26809312/107176890-d5462900-6a13-11eb-86f9-95315a36e8ab.png)
 - 자바 프로그램이 시작될 때 하나의 스레드가 즉시 실행된다. 이 스레드를 프로그램의 메인 스레드라고 한다.
 - 다중 스레드를 만들 때 메인 스레드가 자식 스레드를 만든다.
