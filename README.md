@@ -2,6 +2,8 @@
 
 ------------
 
+### [week11. 애노테이션](https://github.com/whdkfhr/java-study-halle/blob/main/week12.md)
+
 ### [week11. Enum](https://github.com/whdkfhr/java-study-halle/blob/main/week11.md)
 
 ### [week10. 멀티쓰레드 프로그래밍](https://github.com/whdkfhr/java-study-halle/blob/main/week10.md)
