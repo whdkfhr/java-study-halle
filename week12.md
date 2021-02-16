@@ -1,107 +1,103 @@
 
 
-## week11. Enum
+## week12. 애노테이션
 
 ### 학습할 것
-- enum 정의하는 방법
-- enum이 제공하는 메소드(values(), valueOf())
-- java.lang.Enum
-- EnumSet
+- 애노테이션 정의하는 방법
+- @retention
+- @target
+- @documented
+- 애노테이션 프로세서
 
 ***
 
-### enum 정의하는 방법
-- enum은 변수가 미리 정의된 상수 집합이 되도록 하는 데이터 유형이다.
-- enum 변수는 enum에 정의된 값 중 하나이어야 한다.
-- 나침반 방향(동/서/남/북) 혹은 요일(월,화,수,목,금,토,일)과 같이 관련이 있는 상수들의 집합으로 정의한다.
-- 상수이기 때문에 enum의 필드들은 대문자로 정의한다.
+### 애노테이션 정의하는 방법
+- 애노테이션은 자바 프로그램에 주석을 다는 것이다. 애노테이션 자체가 무엇을 실행하는 것은 아니다.
+- 예를 들어, @override 의 경우 부모클래스의 메소드를 오버라이딩한 메소드임을 의미한다. 이 애노테이션은 컴파일러와 ide에게 유용한 힌트를 제공한다. 만약, 오버라이딩할 부모클래스의 메소드 이름과 다를 경우 경고 표시를 해준다.
+- 모든 애노테이션들은 java.lang.annotation.Annotation을 상속 받는다.
 ```java
-enum Seaon {
-  SPRING, SUMMER, FALL, WINTER
+/*
+ * 커스텀 애노테이션을 만들 때에는, @interface를 사용하여 만든다.
+ */
+ @Target(ElementType.METHOD)
+ @Retention(RetentionPolicy.RUNTIME)
+ public @interface Nicname {
+  String[] value() default {};
+ }
+```
+```java
+@Nickname("Test")
+public void test() {
 }
 
-public class People {
-  public String name;
-  public String favoriteSeason;
-  
-  public static void main(String[] args) {
-    People people1 = new People();
-    people1.name = "arok";
-    people1.favoriteSeason = Season.SPRING;
-    
-    System.out.println("이름 : " + people1.name);
-    System.out.println("좋아하는 계절 : " + people1.favoriteSeason);
-  }
+@Nickname(value = "Test2")
+public void test2() {
 }
 ```
 
 ***
 
-### enum이 제공하는 메소드(values(), valueOf())
-#### values()
-- enum에 정의한 필드를 배열로 반환해준다.
+### @retention
+- 내가 만든 애노테이션 정보를 얼마나 유지할 것인가를 정의(RetentionPolicy)
+  - @Retention(RetentionPolicy.SOURCE) : 소스까지만 애노테이션 정보를 유지. SOURCE로 설정 시 컴파일하면 애노테이션이 사라진다.
+  - @Retention(RetentionPolicy.CLASS) : CLASS는 클래스 파일까지 유지하겠다는 의미. 즉, 컴파일 -> 바이트코드 -> 클래스 파일 안에도 이 애노테이션 정보가 남아있다는 의미. 하지만 런타임 시에는 애노테이션 정보가 사라진다.
+  - @Retention(RetentionPolicy.RUNTIME) : 런타임까지 애노테이션 정보를 유지하겠다는 의미.
+
 ```java
 for(Season season : Season.values()) {
   System.out.println(season);
 }
 ```
-#### valueOf()
-- enum에 정의된 필드 중 특정 필드를 가져올 수 있다.
+
+***
+
+### @target
+- 내가 만든 애노테이션을 자바의 엘리먼트(ElementType(필드, 메소드, 생성자 등)) 중 어디에 붙일 수 있는가를 정의.
 ```java
-Season fall = Season.valueOf("FALL");
+@Target({
+        ElementType.PACKAGE, // 패키지 선언시
+        ElementType.TYPE, // 타입 선언시(Interface, Class, Enum)
+        ElementType.CONSTRUCTOR, // 생성자 선언시
+        ElementType.FIELD, // 멤버 변수 선언시
+        ElementType.METHOD, // 메소드 선언시
+        ElementType.ANNOTATION_TYPE, // 어노테이션 타입 선언시
+        ElementType.LOCAL_VARIABLE, // 지역 변수 선언시
+        ElementType.PARAMETER, // 매개 변수 선언시
+        ElementType.TYPE_PARAMETER, // 매개 변수 타입 선언시
+        ElementType.TYPE_USE // 타입 사용시(자바 8 이상)
+        ElementType.MODULE // 모듈 사용 시(자바 9 이상)
+})
 ```
 
 ***
 
-### java.lang.Enum
-- 모든 enum은 암시적으로 java.lang.Enum 클래스를 상속받는다.
-- 자바는 다중상속을 지원하지 않으므로 enum은 다른 클래스를 상속 받을 수 없다.
-- java.lang.Enum을 상속받기 때문에 java.lang.Enum에 정의되어 있는 메소드들을 사용할 수 있다.
+### @documented
+- @Documented 애노테이션이 지정된 대상의 JavaDoc에 이 애노테이션의 존재를 표기하도록 지정.
 ```java
-System.out.println(Season.SPRING.name());                     // SPRING
-System.out.println(Season.SPRING.compareTo(Season.WINTER));   // -1
-System.out.println(Season.SPRING.equals(Season.SPRING));      // true
-System.out.println(Season.SPRING.ordinal());                  // 0
-System.out.println(Season.SPRING.toString());                 // SPRING
+@Documented
+public @interface MyAnnotation {}
+```
+```java
+@MyAnnotation
+public class MySuperCLass {...}
 ```
 
 ***
 
-### EnumSet
-![pic](https://user-images.githubusercontent.com/26809312/107907497-367f7680-6f97-11eb-8e5d-d30dc8c00fca.png)
-- enum을 컬렉션의 Set을 상속받는 EnumSet으로 만들어서 사용할 수 있다.
+### 애노테이션 프로세서
+- 일반적으로 애노테이션에 대한 코드베이스를 검사, 수정 또는 생성하는데 사용된다. 본질적으로 애노테이션 프로세서는 java 컴파일러의 플로그인의 일종이다. 애노테이션 프로세서를 적재적소에 잘 사용한다면 코드를 단순화 할 수 있다.
+- 컴파일 시 소스코드에 있는 특정 애노테이션을 찾아서 소스코드의 AST(Abstract Syntax Tree)를 조작할 수 있게 해준다.
+- 롬복도 애노테이션 프로세서를 사용하여 소스코드를 조작해준다.
+- 커스텀 애노테이션 프로세서를 만들기 위해서는 Processor 또는 AbstractProcessor를 상속받아야 한다.
+
+#### Annotation Processor는 어떻게 동작하는가?
+애노테이션 처리를 여러 라운드에 걸쳐 수행된다.
+1. 자바 컴파일러가 컴파일을 수행(자바 컴파일러는 애노테이션 프로세서에 대해 미리 알고 있어야 한다)
+2. 실행되지 않은 애노테이션 프로세서들을 수행(각각의 프로세서는 모두 각자의 역할에 맞는 구현이 되어있어야 한다)
+3. 프로세서 내부에서 애노테이션이 달린 Element(변수, 메소드, 클래스 등)들에 대한 처리를 한다(보통 이곳에서 자바 클래스를 생성)
+4. 컴파일러가 모든 애노테이션 프로세서가 실행되었는지 확인하고, 그렇지 않다면 반복해서 위 작업을 수행한다.
 ```java
 /*
- * of : enum값들로 EnumSet을 만든다
+ * @Magic이라는 커스텀 애노테이션을 만들고, @Magic이 붙은 Moja라는 인터페이스를 찾아서
+ * 해당 인터페이스를 구현한 MagicMoja.class라는 파일을 생성해주는 코드
  */
- System.out.println("of : " + EnumSet.of(Season.SPRING, Season.FALL));
- 
- 
-/*
- * complementOf : 전달한 enum값들 중 없는 enum값들로 EnumSet을 만든다
- */
- System.out.println("complementOf : " + EnumSet.complementOf(EnumSet.of(Season.SPRING, Season.FALL)));
- 
- /*
- * allOf : enum으로 만든 클래스로 EnumSet을 만든다.
- */
- System.out.println("allOf : " + EnumSet.allOf(Season.class));
- 
- 
- /*
- * range : enum에 정의된 필드의 범위를 전달하여 EnumSet을 만든다.
- */
- System.out.println("range : " + EnumSet.range(Season.SUMMER, Season.WINTER));
- 
- 
- /*
- * iterator : enum으로 만든 클래스를 Iterator 클래스로 만들어서 사용할 수 있다.
- */
- Iterator<Season> iter = EnumSet.allOf(Season.class).iterator();
- System.out.print("iterator : ");
- while(iter.hasNext()) {
-  System.out.print(iter.next() + " ");
- }
-```
-
-***
