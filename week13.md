@@ -72,24 +72,21 @@ Channels | Description |
 #### InputStream
 - Java InputStream Class는 모든 InputStream Class의 최상위 추상 클래스이다.
 - InputStream의 하위 클래스들은 항상 다음 입력 바이트를 반환하는 메소드를 제공해야 한다.
-```java
-/*
- * 커스텀 애노테이션을 만들 때에는, @interface를 사용하여 만든다.
- */
- @Target(ElementType.METHOD)
- @Retention(RetentionPolicy.RUNTIME)
- public @interface Nicname {
-  String[] value() default {};
- }
 ```
-```java
-@Nickname("Test")
-public void test() {
-}
+read() : 입력 스트림으로부터 1byte를 읽고, 읽은 바이트를 리턴하는 메소드
+read(byte[] b) : 입력 스트림으로부터 읽은 바이트들을 byte[] b에 저장하고 실제로 읽은 바이트 수를 리턴하는 메소드.
+read(byte[] b, int off, int len) : 입력 스트림으로부터 len byten만큼 읽어 byte[] b의 b[off]부터 len 개까지 저장한 후 읽은 byte 수인 len개를 리턴한다. 만약 len개보다 적은 byte를 읽는 경우 실제 읽은 byte수를 리턴하는 메소드.
+close() : 사용한 시스템 리소스를 반납 후 입력 스트림을 닫는 메소드.
+```
 
-@Nickname(value = "Test2")
-public void test2() {
-}
+#### OutputStream
+- OutputStream은 InputStream과 마찬가지로 출력 스트림들 중 최상위 클래스로 추상 클래스이다.
+- Byte기반으로 출력되는 스트림은 OutputStream 클래스를 상속받아 생성된다.
+```
+write(byte[] b) : 출력 스트림으로부터 주어진 byte[] b의 모든 byte를 보내는 메소드.
+write(byte[] b, int off, int len) : 출력 스트림으로부터 byte[] b의 b[off]부터 len개까지의 byte를 보내는 메소드.
+flush() : 버퍼에 남아있는 모든 byte를 출력하는 메소드.
+close() : 사용한 시스템 리소스를 반납 후 출력 스트림을 닫는 메소드.
 ```
 
 ***
