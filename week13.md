@@ -49,6 +49,7 @@
 - 일반적으로 채널은 인터페이스를 확장하고 구현하는 인터페이스 및 클래스의 사양에 설명된 대로 다중 스레드 접근을 위해 안전하도록 고안되었다.
 
 
+
 | Channels | Description |
 | Channel | A nexus for I/O operations |
 | ReadablyByteChannel | Can read into a buffer |
@@ -62,6 +63,7 @@
 | NetworkChannel | A channel to a network socket |
 | MulticastChannel | Can join Internet Protocol(IP_ multiast groups |
 | Channels | Utility methods for channel/stream interoperation |
+
 
 
 ```java
