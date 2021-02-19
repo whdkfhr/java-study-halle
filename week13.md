@@ -48,25 +48,20 @@
 - 채널은 열려 있거나 닫혀 있을 수 있으며, 생성 시 열려 있으며 닫히면 닫힌 상태로 유지된다. 채널이 닫히면 해달 채널에서 I/O작업을 호출하려고 하면 닫힌 채널 예외가 발생한다.
 - 일반적으로 채널은 인터페이스를 확장하고 구현하는 인터페이스 및 클래스의 사양에 설명된 대로 다중 스레드 접근을 위해 안전하도록 고안되었다.
 
-|   |   |   |   |   |
-|---|---|---|---|---|
-|   |   |   |   |   |
-|   |   |   |   |   |
-|   |   |   |   |   |
-
-| Channels | Description |
-| Channel | A nexus for I/O operations |
-| ReadablyByteChannel | Can read into a buffer |
-| ScatteringByteChannel | can read into a sequence of buffers |
-| WritableByteChannel | Can write from a buffer |
-| GatheringByteChannel | Can write from a sequence of buffers |
-| ByteChannel | Can read/write to/from a buffer |
-| SeekableByteChannel | A ByteChannel connected to an entity that contains a variable-length sequence of bytes |
-| AsynchronousChannel | Supports asynchronous I/O operations. |
-| AsynchronousByteChannel | Can read and write bytes asynchronously |
-| NetworkChannel | A channel to a network socket |
-| MulticastChannel | Can join Internet Protocol(IP_ multiast groups |
-| Channels | Utility methods for channel/stream interoperation |
+Channels | Description |
+|:--:|:--:|
+|Channel | A nexus for I/O operations|
+|ReadableByteChannel | Can read into a buffer |
+|ScatteringByteChannel | Can read into a sequence of buffers|
+|WritableByteChannel | Can write from a buffer |
+|GatheringByteChannel | Can write from a sequence of buffers |
+|ByteChannel | Can read/write to/from a buffer|
+| SeekableByteChannel	| A ByteChannel connected to an entity that contains a variable-length sequence of bytes|
+|AsynchronousChannel| Supports asynchronous I/O operations. |
+|AsynchronousByteChannel| Can read and write bytes asynchronously |
+|NetworkChannel	|A channel to a network socket |
+|MulticastChannel | Can join Internet Protocol (IP) multicast groups|
+|Channels| Utility methods for channel/stream interoperation |
 
 
 
