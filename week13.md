@@ -91,65 +91,103 @@ close() : 사용한 시스템 리소스를 반납 후 출력 스트림을 닫는
 
 ***
 
-### @retention
-- 내가 만든 애노테이션 정보를 얼마나 유지할 것인가를 정의(RetentionPolicy)
-  - @Retention(RetentionPolicy.SOURCE) : 소스까지만 애노테이션 정보를 유지. SOURCE로 설정 시 컴파일하면 애노테이션이 사라진다.
-  - @Retention(RetentionPolicy.CLASS) : CLASS는 클래스 파일까지 유지하겠다는 의미. 즉, 컴파일 -> 바이트코드 -> 클래스 파일 안에도 이 애노테이션 정보가 남아있다는 의미. 하지만 런타임 시에는 애노테이션 정보가 사라진다.
-  - @Retention(RetentionPolicy.RUNTIME) : 런타임까지 애노테이션 정보를 유지하겠다는 의미.
+### Byte와 Character Stream
 
+#### ByteStream
+- 자바의 스트림은 기본적으로 __Byte 단위로 스트림을 전송__ 하며 입출력 대상에 따라 제공하는 클래스가 다르다.
+- __그림, 멀티미디어, 문자 등 모든 종류의 데이터를 주고받을 수 있다는 특징__
 ```java
-for(Season season : Season.values()) {
-  System.out.println(season);
+// 입출력 스트림 클래스
+FileInputStream / FileOutputStream : 파일 입출력 대상
+ByteArrayInputStream / ByteArrayOutputStream : 메모리 입출력 대상
+PipedInputStream / PipedOutputStream : 프로세스 입출력 대상
+AudioInputStream / AudioOutputStream : 오디오 장치 입출력 대상
+```
+
+#### CharacterStream
+- 자바에서 가장 작은 타입인 char형이 2byte이므로, 1byte씩 전송되는 바이트 기반 스트림으로는 원활한 처리가 힘든 경우가 있다. 이러한 경우를 해결하기 위해 자바는 __문자 기반 스트림__ 을 지원한다.
+- 문자 기반 스트림은 __오직 문자 데이터를 주고받기 위해 존재하는 스트림__ 으로 문자 데이터를 입출력 할 때 사용하는 스트림이다.
+- Reader와  Writer 클래스를 상속받아 사용한다.
+```java
+// 입출력 스트림 클래스
+FileReader / FileWriter : 파일 입출력 대상
+CharArrayReader / charArrayWriter : 메모리 입출력 대상
+PipedReader / PipedWriter : 프로세스 입출력 대상
+StringReader / StringWriter : 문자열 
+```
+
+***
+
+### 표준 스트림
+- 자바에서는 콘솔과 같은 표준 입출력 장치를 위해 System이라는 표준 입출력 클래스를 정의한다.
+- System 클래스는 java.lang 패키지에 포함되어 있다.
+- 표준 입출력 스트림은 자바에서 기본적으로 생성하기 때문에 별도로 생성할 필요가 없다.
+
+#### System.in
+- 콘솔로부터의 입력을 받는 표준 스트림을 가리키는 상수. 
+- 해당객체는 JVM이 메모리에 올라갈 때 생성. 
+- InputStream으로 byte단위로 입력받을 수 있다.
+
+#### System.out
+- 콘솔로 출력을 하는 표준 스트림을 가리키는 상수.
+- ex) System.out.println()
+
+#### System.err
+- 표준 에러 출력 장치를 가리키는 상수.
+
+***
+
+### 파일 읽고 쓰기
+
+#### 파일 읽기
+```java
+public class FileReadTest {
+  public static void main(String[] args) {
+    // 파일 객체 생성
+    File file = new File(" ... ");
+    try {
+      // 입력 스트림, 입ㄹ력 버퍼 생성
+      // FileInputStream, FileReader를 사용해서 파일을 입력 받을 수 있는데,
+      // BufferedInputStream or BufferedReader로 감싸
+      // 파일의 용량이 큰 경우 효율적으로 파일을 읽을 수 있다.
+      FileReader fr = new FileReader(file);
+      BufferedReader br = new BufferedReader(fileReader);
+      String line = "";
+      
+      // 한 줄씩 읽기
+      while((line = br.readLine()) != null) {
+        System.out.println(line);
+      }
+      br.close();
+    } catch(IOException e) {
+      e.printStackTrace();
+    }
+  }
 }
 ```
 
-***
-
-### @target
-- 내가 만든 애노테이션을 자바의 엘리먼트(ElementType(필드, 메소드, 생성자 등)) 중 어디에 붙일 수 있는가를 정의.
+#### 파일 쓰기
 ```java
-@Target({
-        ElementType.PACKAGE, // 패키지 선언시
-        ElementType.TYPE, // 타입 선언시(Interface, Class, Enum)
-        ElementType.CONSTRUCTOR, // 생성자 선언시
-        ElementType.FIELD, // 멤버 변수 선언시
-        ElementType.METHOD, // 메소드 선언시
-        ElementType.ANNOTATION_TYPE, // 어노테이션 타입 선언시
-        ElementType.LOCAL_VARIABLE, // 지역 변수 선언시
-        ElementType.PARAMETER, // 매개 변수 선언시
-        ElementType.TYPE_PARAMETER, // 매개 변수 타입 선언시
-        ElementType.TYPE_USE // 타입 사용시(자바 8 이상)
-        ElementType.MODULE // 모듈 사용 시(자바 9 이상)
-})
+public class FileWriteTest {
+  public static void main(String[] args) {
+    try {
+      // 파일 객체 생성
+      File file = new File(" ... ");
+      BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+      
+      if(file.isFile() && file.canWrite()) {
+        // 쓰기
+        bw.write("hello");
+        bw.newLine();
+        bw.write("world");
+        bw.newLine();
+        bw.close();
+      }
+    } catch(IOException e) {
+      e.printStrackTrace();
+    }
+  }
+}
 ```
-
-***
-
-### @documented
-- @Documented 애노테이션이 지정된 대상의 JavaDoc에 이 애노테이션의 존재를 표기하도록 지정.
-```java
-@Documented
-public @interface MyAnnotation {}
-```
-```java
-@MyAnnotation
-public class MySuperCLass {...}
-```
-
-***
-
-### 애노테이션 프로세서
-- 일반적으로 애노테이션에 대한 코드베이스를 검사, 수정 또는 생성하는데 사용된다. 본질적으로 애노테이션 프로세서는 java 컴파일러의 플로그인의 일종이다. 애노테이션 프로세서를 적재적소에 잘 사용한다면 코드를 단순화 할 수 있다.
-- 컴파일 시 소스코드에 있는 특정 애노테이션을 찾아서 소스코드의 AST(Abstract Syntax Tree)를 조작할 수 있게 해준다.
-- 롬복도 애노테이션 프로세서를 사용하여 소스코드를 조작해준다.
-- 커스텀 애노테이션 프로세서를 만들기 위해서는 Processor 또는 AbstractProcessor를 상속받아야 한다.
-
-#### Annotation Processor는 어떻게 동작하는가?
-애노테이션 처리를 여러 라운드에 걸쳐 수행된다.
-1. 자바 컴파일러가 컴파일을 수행(자바 컴파일러는 애노테이션 프로세서에 대해 미리 알고 있어야 한다)
-2. 실행되지 않은 애노테이션 프로세서들을 수행(각각의 프로세서는 모두 각자의 역할에 맞는 구현이 되어있어야 한다)
-3. 프로세서 내부에서 애노테이션이 달린 Element(변수, 메소드, 클래스 등)들에 대한 처리를 한다(보통 이곳에서 자바 클래스를 생성)
-4. 컴파일러가 모든 애노테이션 프로세서가 실행되었는지 확인하고, 그렇지 않다면 반복해서 위 작업을 수행한다.
-![pic](https://user-images.githubusercontent.com/26809312/108018483-347eeb80-705b-11eb-89ed-2c716b6583c8.png)
 
 ***
