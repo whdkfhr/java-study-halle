@@ -63,8 +63,15 @@ Channels | Description |
 |MulticastChannel | Can join Internet Protocol (IP) multicast groups|
 |Channels| Utility methods for channel/stream interoperation |
 
+- Channel  인터페이스에 지정된 대로, 개발되거나 폐쇄될 수 있으며 비동기식으로 닫히거나 인터럽트할 수 있다. 
 
+***
 
+### InputStream과 OutputStream
+
+#### InputStream
+- Java InputStream Class는 모든 InputStream Class의 최상위 추상 클래스이다.
+- InputStream의 하위 클래스들은 항상 다음 입력 바이트를 반환하는 메소드를 제공해야 한다.
 ```java
 /*
  * 커스텀 애노테이션을 만들 때에는, @interface를 사용하여 만든다.
