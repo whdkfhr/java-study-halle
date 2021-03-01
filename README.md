@@ -2,6 +2,8 @@
 
 ------------
 
+### [week15. 람다식](https://github.com/whdkfhr/java-study-halle/blob/main/week15.md)
+
 ### [week14. 제네릭](https://github.com/whdkfhr/java-study-halle/blob/main/week14.md)
 
 ### [week13. I/O Streams](https://github.com/whdkfhr/java-study-halle/blob/main/week13.md)
