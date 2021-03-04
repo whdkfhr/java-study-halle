@@ -52,88 +52,192 @@ public interface Foo {
 - 
 #### 자바가 제공하는 함수형 인터페이스
 ```
-Supplier <T>  // 매개변수 
-| V | Value |없이 
-| V | Value |
+Supplier <T>  // 매개변수 없이 반환값 만을 갖는 함수형 인터페이스
+```
+```java
+@FunctionalInterface
+public interface Supplier<T> {
+  T get();
+}
 
+Supplier<String> supplier = () -> "Hello Lambda!";
+System.out.println(supplier.get());
+```
+
+```
+Consumer<T> // 객체를 인자로 받고 리턴값은 없다.
+```
+```java
+public interface Consumer<T> {
+  void accept(T t);
+  
+  default Consumer<T> andThen(Consumer<? superT> after) {
+    Objects.requireNonNull(after);
+    return (T t) -> {accept(t); after.accept(t);};
+  }
+}
+
+Consume<String> printString = text -> System.out.println("Hello " + text);
+printString.accept("Lambda!");  // Hello Lambda!
+Consumer<String> printString2 = text -> System.out.println("Bye Lambda!");
+printString.andThen(printString2).accept("Lambda");   // Hello Lambda!
+                                                      // Bye Lambda!
+```
+
+```
+Function <T, R>   // T 타입의 인자를 받고, R 타입의 객체를 리턴
+```
+```java
+public interface Function<T, R> {
+  R appliy(T t);
+  
+  default <V> Function<V, R> compse(Function<? super V, ? extends T> before) {
+    Objects.requireNonNull(before);
+    return (V v) -> apply(before.apply(v));
+  }
+  
+  default <V> Function<T, V> andThen(Function<? super R, ? extends V> after) {
+    Objects.requireNonNull(before);
+    return (T t) -> after.apply(apply(t));
+  }
+  
+  static <T> Function<T, T> identity() {
+    return t -> t;
+  }
+}
+
+Function<Integer, Integer> add = (value) -> value + 10;
+Integer result = add.apply(5);
+System.out.println(result);   // 15
+```
+
+```
+Predicate<T>    // T 타입 인자를 받고 결과를 boolean 반환
+```
+```java
+public interface Predicate<T> {
+  boolean test(T t);
+	
+	default Predicate<T> and(Predicate<? super T> other) {
+		Objects.requireNonNull(other);
+		return (t) -> test(t) && other.test(t);
+  }
+ 
+  default Predicate<T> negate() {
+    return (t) -> !test(t);
+  }
+  
+  default Predicate<T> or (Predicate<? super T> other) {
+    Objects.requireNonNull(other);
+    return (t) -> test(t) || other.test(t);
+  }
+  
+  static <T> predicate<T> isEqual(Object targerRef) {
+    return (null == targetRef) ? Objects::isNull
+      : object -> targetRef.equals(object);
+  }
+}
+
+Predicate<Integer> isBigger = num -> num > 5;
+System.out.print(isBigger.test(10)) // ture
+Predicate<String> isEqual = Predicate.isEqual("Google");
+isEqual.test("Google"); // true
+```
 ***
 
-### 제네릭 주요 개념(바운디드 타입, 와일드 카드)
+### Variable Capture
+> Java 람다식은 특정 상황에서 람다 함수 본문 외부에 선언된 변수에 접근이 가능하다. Java8 이전에서는 익명의 내부 클래스가 이를 둘러싼 컴파일러가 만족할 수 있도록 로컬 변수 앞에 final 키워드를 추가했어야만 했다.
 
-#### 바운디드 타입
-- 바운디드 타입은 제네릭으로 사용될 타입 파라미터의 값을 제한할 수 있는 방법
+#### 지역 변수
+- 참조되는 변수는 "effectively final" 이다. 즉, 할당된 후에도 값을 변경하지 않는다. 나중에 myString 변수의 값이 변경되면 컴파일러는 람다 본체 내부에서 myString 변수에 대한 참조에 대해 complain
 ```java
-// ex) 정수든 실수든 숫자값이라면 모두 사용하고 싶을 때
-public class GenericClass<T extends Number> { }
+public interface MyFactory {
+  public String create(char[] chars);
+}
+
+String myString = "Test";
+MyFactory mf = (chars) -> {return myString + " : " + new String(chars);};
 ```
+
+#### Instance Variables
+- 동봉된 EventConsumerImpl 객체의 name 인스턴스 변수를 캡처한다
+- 람다는 __자체 인스턴스 변수를 가질 수 없으므로, 항상 둘러싸는 개체를 가리킨다__
 ```java
-GenericClass<Integer> integerGC = new GenericClass<>();
-GenericClass<Float> floatGC = new GenericClass<>();
-GenericClass<Long> longGC = new GenericClass<>();
-
-GenericClass<String> stringGC = new GenericClass<>();   // Number를 상속받은 객체가 아니므로, 컴파일 에러
+public class EventConsumerImpl {
+  private String name = "MyConsumer";
+  
+  public void attach(MyEventProducer eventProducer) {
+    eventProducer.listen ( e -> {
+      Ststem.out.println(this.name);
+    });
+  }
+}
 ```
 
-#### 와일드 카드
-- 제네릭을 사용하면 타입이 제한된다.
-- 어떤 타입도 받을 수 있도록 하기위해서 와일드 카드를 사용
-```
-<? super T> : 와일드 카드의 상한 제한. T와 그 자식들만 가능
-<? extends T> : 와일드 카드의 하한 제한. T와 그 조상들만 가능
-<?> : 제한없이 모든 타이비 가능. <? extends Object> 와 동일.
-```
+#### Static Variables
 ```java
-public class Person {}
-public class Arok extends Person {}
-```
-```java
-List<? super Person> test1 = new ArrayList<Person>();
-List<? super Person> test2 = new ArrayList<Arok>();   // 컴파일 에러
-
-List<? extends Person> test3 = new ArrayList<Person>();
-List<? extends Person> test4 = new ArrayList<Arok>(); // <? extends Person>을 통해 다형성 사용가능.
-```
-
-***
-
-### 제네릭 메소드 만들기
-- 제네릭 메소드란 메서드 선언부에 제네릭 타입이 선언된 메서드를 말한다.
-```java
-// 대표적인 제네릭 메소드
-// Collections 클래스의 sort 메소드.
-// 제네릭 클래스에 정의된 타입 변수 T와 메소드에서 사용된 타입 변수 T
-public static <T> void sort(List<T> list, Comparator<? super T> c) {
-  list.sort(c);
+public class EventConsumerImpl {
+  private static String someStaticVar = "some txt";
+  
+  public void attach(MyEventProducer eventProducer) {
+    eventProducer.listen( e -> }
+      System.out.println(someStaticVar);
+    });
+  }
 }
 ```
 
 ***
 
-### Erasure
-- Erasure란 원소 타입을 컴파일 타임에서만 검사를 하고, 런타임에는 해당 타입 정보를 알 수가 없다. 즉, 컴파일 상태에만 제약 조건을 적용하고, 런타임에는 타입에 대한 정보를 소거하는 프로세스.
+### 메소드, 생성자 레퍼런스
+> Java 람다는 메소드를 생성할 수 있는 간결한 방법을 제공
+
+#### 메소드 레퍼런스
+- `static Method References` : 메소드 참조는 static method를 직접적으로 가리킬 수 있다.
 ```java
-public static void main(String[] args) {
-  List<String> list = new ArrayList<>();
+public interface Finder {
+  public int find(String s1, String s2);
 }
-```
-```java
-public static main([Ljava/lang/String;)V throws java/io/IOException 
-   L0
-    LINENUMBER 9 L0
-    NEW java/util/ArrayList
-    DUP
-    INVOKESPECIAL java/util/ArrayList.<init> ()V
-    ASTORE 1
-   L1
-    LINENUMBER 10 L1
-    RETURN
-   L2
-    LOCALVARIABLE args [Ljava/lang/String; L0 L2 0
-    LOCALVARIABLE list Ljava/util/List; L1 L2 1
-    // signature Ljava/util/List<Ljava/lang/String;>;
-    // declaration: list extends java.util.List<java.lang.String>
-    MAXSTACK = 2
-    MAXLOCALS = 2
+
+public class MyClass {
+  public static int doFind(String s1, String s2) {
+    return s1.lastIndexOf(2);
+  }
+}
+
+Finder finder = MyClass::doFind;
 ```
 
+- `Parameter Method Referece`
+```java
+Finder finder = String::indexOf;;
+Finder finder = (s1,  s2) -> s1.indexOf(s2);
+```
+
+- `Instance Method Referece` : 특정 인스턴스의 메소드를 참조할 수 있다
+```java
+public interface Deserializer {
+  public int deserialize(String v1);
+}
+
+public class StringConverter {
+  public int converterToInt(String v1) {
+    return Integer.valueOf(v1);
+  }
+}
+
+StringConverter sc = new StringConverter();
+Deserializer des = sc::convertToInt;
+```
+
+#### 생성자 레퍼런스
+- `MyClass::new`
+```java
+public interface Factory {
+  public String create(char[] val);
+}
+
+Factory factory = String::new;    // (==) Factory = chars -> new String(chars); 
+```
 ***
+
